@@ -154,19 +154,19 @@ class TransactionTests() {
         test(
             name = "check if transaction not exists",
             actualResult = trService.isTransactionExists(invalidTransaction),
-            expectedResult = -1
+            expectedResult = false
         )
         test(
             name = "check if transaction exists",
             actualResult = trService.isTransactionExists(transactions[1]),
-            expectedResult = 1
+            expectedResult = true
         )
     }
 
     private fun testDeleteTransaction() {
         val transactions = mutableListOf(
             Transaction(
-                amount = 100.0,
+                amount = 500.0,
                 date = LocalDate.now(),
                 category = Category("Test 1"),
                 transactionType = TransactionType.INCOME
@@ -191,6 +191,7 @@ class TransactionTests() {
             ),
         )
         val trService = TransactionService(
+            balance = 0.0,
             transactions = transactions
         )
         val trSizeBefore = trService.getTransactionsSize()
@@ -205,6 +206,11 @@ class TransactionTests() {
             name = "check if transaction is deleted, using return of add method",
             actualResult = deleteTransactionResult,
             expectedResult = true
+        )
+        test(
+            name = "check if transaction is not deleted, as it is INCOME and current balance is not sufficient for returning money",
+            actualResult = trService.deleteTransaction(transactions[1]),
+            expectedResult = false
         )
     }
 
