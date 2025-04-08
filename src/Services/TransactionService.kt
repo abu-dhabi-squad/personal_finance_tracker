@@ -1,15 +1,11 @@
 package Services
 
-import Models.Category
 import Models.Transaction
 import Models.TransactionType
-import java.time.LocalDate
 
 class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf()
 ) {
-
-
     fun getBalance(): Double {
         var balance: Double = 0.0
         transactions.forEach { trans ->
@@ -23,7 +19,6 @@ class TransactionService(
     }
 
     fun getByMonth(month: Int): List<Transaction> {
-
-        return listOf<Transaction>()
+        return transactions.filter { transaction -> transaction.date.month.value == month }
     }
 }
