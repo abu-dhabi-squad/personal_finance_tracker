@@ -3,13 +3,42 @@ package Services
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
+import Models.UITransaction
+import Test.test
 import java.time.LocalDate
+import java.util.*
 
 class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf()
 ) {
     private val balance: Double = 1000.0
         get() { return field}
+
+    fun getTransactionsSize(): Int = transactions.size
+
+    fun addTransaction(transaction: UITransaction): Boolean {
+        return false
+    }
+
+    fun canWithdraw(amount: Double): Boolean {
+        return false
+    }
+
+    fun editTransaction(id: UUID, transaction: UITransaction): Boolean {
+        return false
+    }
+
+    fun isTransactionExists(id: UUID): Int {
+        return -1
+    }
+
+    fun deleteTransaction(id: UUID): Boolean {
+        return false
+    }
+
+    fun listAllTransactions(): List<Transaction> {
+        return listOf()
+    }
 
     fun getBalance(): Double {
         return balance
