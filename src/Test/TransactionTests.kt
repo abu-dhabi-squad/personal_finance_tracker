@@ -11,7 +11,16 @@ import java.util.UUID
 // Add test functions for every feature and call it in main test file
 
 class TransactionTests() {
-    fun testAddTransaction() {
+    fun runAllTests() {
+        testAddTransaction()
+        testCanWithdraw()
+        testEditTransaction()
+        testIsTransactionExists()
+        testDeleteTransaction()
+        testListAllTransactions()
+    }
+
+    private fun testAddTransaction() {
         val trService: TransactionService = TransactionService()
         val trSizeBefore = trService.getTransactionsSize()
         val addTransactionResult = trService.addTransaction(
@@ -35,7 +44,7 @@ class TransactionTests() {
         )
     }
 
-    fun testCanWithdraw() {
+    private fun testCanWithdraw() {
         val trService: TransactionService = TransactionService()
         var currentBalance = trService.getBalance()
         test(
@@ -51,7 +60,7 @@ class TransactionTests() {
         )
     }
 
-    fun testEditTransaction() {
+    private fun testEditTransaction() {
         val transactions = mutableListOf(
             Transaction(
                 amount = 100.0,
@@ -105,7 +114,7 @@ class TransactionTests() {
         )
     }
 
-    fun testIsTransactionExists() {
+    private fun testIsTransactionExists() {
         val transactions = mutableListOf(
             Transaction(
                 amount = 100.0,
@@ -135,19 +144,25 @@ class TransactionTests() {
         val trService = TransactionService(
             transactions = transactions
         )
+        val invalidTransaction = Transaction(
+            amount = 150.0,
+            date = LocalDate.now(),
+            category = Category("Test 1"),
+            transactionType = TransactionType.EXPENSES
+        )
         test(
-            name = "check if id exists",
-            actualResult = trService.isTransactionExists(UUID.randomUUID()),
+            name = "check if transaction not exists",
+            actualResult = trService.isTransactionExists(invalidTransaction),
             expectedResult = -1
         )
         test(
-            name = "check if id exists",
-            actualResult = trService.isTransactionExists(transactions[1].id),
+            name = "check if transaction exists",
+            actualResult = trService.isTransactionExists(transactions[1]),
             expectedResult = 1
         )
     }
 
-    fun testDeleteTransaction() {
+    private fun testDeleteTransaction() {
         val transactions = mutableListOf(
             Transaction(
                 amount = 100.0,
@@ -178,7 +193,7 @@ class TransactionTests() {
             transactions = transactions
         )
         val trSizeBefore = trService.getTransactionsSize()
-        val deleteTransactionResult = trService.deleteTransaction(transactions[1].id)
+        val deleteTransactionResult = trService.deleteTransaction(transactions[1])
         val trSizeAfter = trService.getTransactionsSize()
         test(
             name = "check if transaction is deleted, using checking list size",
@@ -192,7 +207,7 @@ class TransactionTests() {
         )
     }
 
-    fun testListAllTransactions() {
+    private fun testListAllTransactions() {
         val transactions = mutableListOf(
             Transaction(
                 amount = 100.0,

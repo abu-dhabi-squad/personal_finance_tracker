@@ -1,7 +1,7 @@
 package Test
 
 fun main() {
-
+    TransactionTests().runAllTests()
 }
 
 fun test(name: String, actualResult: Any, expectedResult: Any) {

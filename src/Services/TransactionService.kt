@@ -12,7 +12,6 @@ class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf()
 ) {
     private val balance: Double = 1000.0
-        get() { return field}
 
     fun getTransactionsSize(): Int = transactions.size
 
@@ -28,11 +27,15 @@ class TransactionService(
         return false
     }
 
-    fun isTransactionExists(id: UUID): Int {
-        return -1
+    fun isTransactionExists(transaction: Transaction): Int {
+        return transactions.indexOf(transaction)
     }
 
-    fun deleteTransaction(id: UUID): Boolean {
+    fun deleteTransaction(transaction: Transaction): Boolean {
+        val index = isTransactionExists(transaction)
+        if (index != -1) {
+            return transactions.remove(transaction)
+        }
         return false
     }
 
