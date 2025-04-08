@@ -22,15 +22,10 @@ class TransactionTests() {
     }
 
     private fun testAddTransaction() {
-        val trService: TransactionService = TransactionService()
+        val trService = TransactionService(balance = 0.0)
         val trSizeBefore = trService.getTransactionsSize()
-        val addTransactionResult = trService.addTransaction(
-            UITransaction(
-                amount = 100.0,
-                date = "2025-03-03",
-                category = Category("Test 1"),
-                transactionType = TransactionType.INCOME
-            )
+        val validAddTransactionResult = trService.addTransaction(
+            UITransaction(100.0, Category("Test 1"), TransactionType.INCOME, "03-03-2025")
         )
         val trSizeAfter = trService.getTransactionsSize()
         test(
@@ -40,8 +35,22 @@ class TransactionTests() {
         )
         test(
             name = "check if transaction is added, using return of add method",
-            actualResult = addTransactionResult,
+            actualResult = validAddTransactionResult,
             expectedResult = true
+        )
+        test(
+            name = "check if transaction is added, as it is EXPENSES and current balance is sufficient for the amount",
+            actualResult = trService.addTransaction(
+                UITransaction(50.0, Category("Test 1"), TransactionType.EXPENSES, "03-03-2025")
+            ),
+            expectedResult = true
+        )
+        test(
+            name = "check if transaction is not added, as it is EXPENSES and current balance is not sufficient for the amount",
+            actualResult = trService.addTransaction(
+                UITransaction(200.0, Category("Test 1"), TransactionType.EXPENSES, "03-03-2025")
+            ),
+            expectedResult = false
         )
     }
 
@@ -55,7 +64,7 @@ class TransactionTests() {
         )
         currentBalance = trService.getBalance()
         test(
-            name = "check if balance is sufficient",
+            name = "check if balance is not sufficient",
             actualResult = trService.canWithdraw(currentBalance + 100),
             expectedResult = false
         )
