@@ -4,23 +4,34 @@ import Models.Category
 import Models.Transaction
 import Models.TransactionType
 import Models.UITransaction
-import Test.test
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf(),
-    private var balance: Double = 1000.0,
+    private var balance: Double = 0.0,
 ) {
 
     fun getTransactionsSize(): Int = transactions.size
 
     fun addTransaction(transaction: UITransaction): Boolean {
-        return false
+        if (transaction.transactionType == TransactionType.EXPENSES && !canWithdraw(transaction.amount)) return false
+        transactions.add(Transaction(
+            amount = transaction.amount,
+            category = transaction.category,
+            transactionType = transaction.transactionType,
+            date = LocalDate.parse(transaction.date, DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+        ))
+        when(transaction.transactionType) {
+            TransactionType.INCOME -> balance += transaction.amount
+            TransactionType.EXPENSES -> balance -= transaction.amount
+        }
+        return true
     }
 
     fun canWithdraw(amount: Double): Boolean {
-        return false
+        return amount <= balance
     }
 
     fun editTransaction(id: UUID, transaction: UITransaction): Boolean {
