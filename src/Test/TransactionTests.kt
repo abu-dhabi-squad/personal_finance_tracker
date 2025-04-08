@@ -12,6 +12,7 @@ import java.util.UUID
 
 class TransactionTests() {
     fun runAllTests() {
+        println("Transaction Tests")
         testAddTransaction()
         testCanWithdraw()
         testEditTransaction()
