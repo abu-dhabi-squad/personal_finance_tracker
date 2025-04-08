@@ -8,24 +8,63 @@ import java.time.LocalDate
 import java.util.*
 
 fun main(){
+
+    var transactionService: TransactionService = TransactionService(mutableListOf<Transaction>())
+
+    // balance test cases
+    test("empty list",transactionService.getBalance(),0.0 )
+
+
     var list:MutableList<Transaction> = mutableListOf(
+        Transaction(1000.0, Category("food"),TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
+         )
+    transactionService = TransactionService(list)
+    test("add Income with 1000.0 to list",transactionService.getBalance(),1000.0 )
+
+
+    list = mutableListOf(
+        Transaction(1000.0, Category("food"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
+    )
+    transactionService = TransactionService(list)
+    test("add Expenses with 1000.0 to list",transactionService.getBalance(),-1000.0 )
+
+
+    //getByMonth test cases
+    transactionService = TransactionService(mutableListOf<Transaction>())
+    test("empty list",transactionService.getByMonth(1), mutableListOf<Transaction>())
+
+
+    list = mutableListOf(
         Transaction(100.0, Category("food"),TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
         Transaction(10.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
         Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
         Transaction(200.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID())
     )
-    val transactionService: TransactionService = TransactionService(list)
-
-    // balance test cases
-    test("empty list",transactionService.getBalance(),0.0 )
-    test("add Income with 1000.0 to list",transactionService.getBalance(),1000.0 )
-    test("add Expenses with 1000.0 to list",transactionService.getBalance(),-1000.0 )
-
-    //getByMonth test cases
-    test("empty list",transactionService.getByMonth(1), mutableListOf<Transaction>())
+    transactionService = TransactionService(list)
     test("dont have the month in the list",transactionService.getByMonth(1), mutableListOf<Transaction>())
-    test("invalid month",transactionService.getByMonth(13), mutableListOf<Transaction>())
 
+
+    list = mutableListOf(
+        Transaction(100.0, Category("food"),TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
+        Transaction(10.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
+        Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.of(2024,1,12), UUID.randomUUID()),
+        Transaction(200.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
+        Transaction(1000.0, Category("beauty"),TransactionType.EXPENSES, LocalDate.of(2024,1,13), UUID.randomUUID()),
+    )
+    transactionService = TransactionService(list)
+
+    println(transactionService.getByMonth(1))
+    test(
+        "have multiple months in list",
+        transactionService.getByMonth(1),
+        listOf(
+            Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.of(2024,1,12), UUID.randomUUID()),
+            Transaction(1000.0, Category("beauty"),TransactionType.EXPENSES, LocalDate.of(2024,1,13), UUID.randomUUID()),)
+    )
+
+
+
+    test("invalid month",transactionService.getByMonth(13), mutableListOf<Transaction>())
 
 }
 // Add test functions for every feature and call it in main test file
