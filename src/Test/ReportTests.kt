@@ -44,22 +44,22 @@ fun main(){
     test("dont have the month in the list",transactionService.getByMonth(1), mutableListOf<Transaction>())
 
 
+    val id1 = UUID.randomUUID()
+    val id2 = UUID.randomUUID()
     list = mutableListOf(
         Transaction(100.0, Category("food"),TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
         Transaction(10.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
-        Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.of(2024,1,12), UUID.randomUUID()),
+        Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.of(2024,1,12), id1),
         Transaction(200.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
-        Transaction(1000.0, Category("beauty"),TransactionType.EXPENSES, LocalDate.of(2024,1,13), UUID.randomUUID()),
+        Transaction(1000.0, Category("beauty"),TransactionType.EXPENSES, LocalDate.of(2024,1,13),id2),
     )
     transactionService = TransactionService(list)
-
-    println(transactionService.getByMonth(1))
     test(
         "have multiple months in list",
         transactionService.getByMonth(1),
         listOf(
-            Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.of(2024,1,12), UUID.randomUUID()),
-            Transaction(1000.0, Category("beauty"),TransactionType.EXPENSES, LocalDate.of(2024,1,13), UUID.randomUUID()),)
+            Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.of(2024,1,12), id1),
+            Transaction(1000.0, Category("beauty"),TransactionType.EXPENSES, LocalDate.of(2024,1,13), id2),)
     )
 
 
