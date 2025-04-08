@@ -1,25 +1,26 @@
 package Services
 
-class ReportService(private val transactionService: TransactionService) {
+import Models.Transaction
+import Models.TransactionType
 
-    fun getBalance(): String{
-        return "the Balance = "+ transactionService.getBalance()
-    }
+class ReportService(private val transactions: MutableList<Transaction>) {
 
-    fun getMonthlySummary(month: Int?):String{
-        if(month != null && month in 1 .. 12){
-            val list = transactionService.getByMonth(month)
-            var result = "total transaction in month = "+ list.size+ "\n"
-            result+= "amount | category | transactionType | date\n"
-            list.forEach { trans->
-
-                result+= trans.amount.toString() + " | "+
-                        trans.category.name + " | "+
-                        trans.transactionType + " | "+
-                        trans.date.toString() + "\n"
+    fun getBalance(): Double {
+        var balance: Double = 0.0
+        transactions.forEach { trans ->
+            when (trans.transactionType.name) {
+                TransactionType.INCOME.toString() -> balance += trans.amount
+                TransactionType.EXPENSES.toString() -> balance -= trans.amount
             }
-            return result
         }
-        return "Invalid Month"
+        return balance
     }
+
+    fun getSummaryByMonth(month: Int?): List<Transaction> {
+        if(month != null && month in 1 .. 12){
+            return transactions.filter { transaction -> transaction.date.month.value == month }
+        }
+        return listOf()
+    }
+
 }
