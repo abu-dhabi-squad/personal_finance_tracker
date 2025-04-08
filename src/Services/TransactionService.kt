@@ -8,39 +8,22 @@ import java.time.LocalDate
 class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf()
 ) {
-    private val balance: Double = 1000.0
-        get() { return field}
+
 
     fun getBalance(): Double {
+        var balance: Double = 0.0
+        transactions.forEach { trans ->
+            when (trans.transactionType.name) {
+                TransactionType.INCOME.toString() -> balance += trans.amount
+                TransactionType.EXPENSES.toString() -> balance -= trans.amount
+            }
+
+        }
         return balance
     }
 
     fun getByMonth(month: Int): List<Transaction> {
-        return listOf(
-            Transaction(
-                amount = 100.0,
-                date = LocalDate.now(),
-                category = Category("Test 1"),
-                transactionType = TransactionType.INCOME
-            ),
-            Transaction(
-                amount = 200.0,
-                date = LocalDate.now(),
-                category = Category("Test 1"),
-                transactionType = TransactionType.EXPENSES
-            ),
-            Transaction(
-                amount = 300.0,
-                date = LocalDate.now(),
-                category = Category("Test 2"),
-                transactionType = TransactionType.INCOME
-            ),
-            Transaction(
-                amount = 150.0,
-                date = LocalDate.now(),
-                category = Category("Test 2"),
-                transactionType = TransactionType.EXPENSES
-            ),
-        )
+
+        return listOf<Transaction>()
     }
 }
