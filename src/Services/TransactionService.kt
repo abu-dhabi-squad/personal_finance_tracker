@@ -9,9 +9,9 @@ import java.time.LocalDate
 import java.util.*
 
 class TransactionService(
-    private val transactions: MutableList<Transaction> = mutableListOf()
+    private val transactions: MutableList<Transaction> = mutableListOf(),
+    private var balance: Double = 1000.0,
 ) {
-    private val balance: Double = 1000.0
 
     fun getTransactionsSize(): Int = transactions.size
 
@@ -27,14 +27,21 @@ class TransactionService(
         return false
     }
 
-    fun isTransactionExists(transaction: Transaction): Int {
-        return transactions.indexOf(transaction)
+    fun isTransactionExists(transaction: Transaction): Boolean {
+        return transactions.contains(transaction)
     }
 
     fun deleteTransaction(transaction: Transaction): Boolean {
-        val index = isTransactionExists(transaction)
-        if (index != -1) {
-            return transactions.remove(transaction)
+        if (isTransactionExists(transaction)) {
+            if (transaction.transactionType == TransactionType.INCOME && !canWithdraw(transaction.amount)) return false
+            val success = transactions.remove(transaction)
+            if (success) {
+                when(transaction.transactionType) {
+                    TransactionType.INCOME -> balance -= transaction.amount
+                    TransactionType.EXPENSES -> balance += transaction.amount
+                }
+                return true
+            }
         }
         return false
     }
