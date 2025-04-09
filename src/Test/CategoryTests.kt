@@ -2,6 +2,7 @@ package Test
 
 import Models.Category
 import Services.CategoryService
+import src.Data.InMemoryCategoryRepository
 
 fun main() {
     val categoryTest = CategoryTests()
@@ -11,7 +12,7 @@ class CategoryTests {
 
 
     fun testAddCategory() {
-        val category = CategoryService()
+        val category = CategoryService(InMemoryCategoryRepository())
 
         test("check add new category", true,
             category.addCategory(Category("Shopping")))
@@ -26,7 +27,7 @@ class CategoryTests {
 
 
     fun testDeleteCategory() {
-        val category: CategoryService = CategoryService()
+        val category: CategoryService = CategoryService(InMemoryCategoryRepository())
         val categorySize=category.getAllCategories().size
 
         test("check if the category deleted", true,

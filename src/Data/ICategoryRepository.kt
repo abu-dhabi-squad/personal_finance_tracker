@@ -5,7 +5,7 @@ import Models.Category
 interface ICategoryRepository {
 
     fun add(category: Category):Boolean
-    fun delete(index: Int):Boolean
+    fun delete(categoryNumber: Int):Boolean
     fun getAll():List<Category>
 
 }

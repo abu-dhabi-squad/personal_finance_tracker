@@ -1,18 +1,31 @@
 package src.Data
 
 import Models.Category
+import java.io.File
 
-class InFileCategoryRepository:ICategoryRepository {
+class InFileCategoryRepository(private val categoryFile:File):ICategoryRepository {
+
     override fun add(category: Category): Boolean {
-        TODO("Not yet implemented")
+        val categories = CategoryFileHelper.readCategories(categoryFile)
+        categories.add(category)
+        CategoryFileHelper.writeCategories(categoryFile, categories)
+        return true
     }
 
-    override fun delete(index: Int): Boolean {
-        TODO("Not yet implemented")
+    override fun delete(categoryNumber: Int): Boolean {
+        val categories = CategoryFileHelper.readCategories(categoryFile)
+        val categoriesSize = categories.size
+        if (categoryNumber !in 1 .. categoriesSize)
+            return false
+        val isRemoved =  categories.remove(categories[categoryNumber - 1])
+
+        CategoryFileHelper.writeCategories(categoryFile, categories)
+        return isRemoved
+
     }
 
     override fun getAll(): List<Category> {
-        TODO("Not yet implemented")
+        return CategoryFileHelper.readCategories(categoryFile)
     }
 
 }

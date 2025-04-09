@@ -9,8 +9,8 @@ class CategoryService(private val iCategoryRepository: ICategoryRepository) {
         return iCategoryRepository.add(category)
     }
 
-    fun deleteCategory(index: Int): Boolean {
-        return iCategoryRepository.delete(index)
+    fun deleteCategory(categoryNumber: Int): Boolean {
+        return iCategoryRepository.delete(categoryNumber)
     }
 
     fun getAllCategories(): List<Category> {

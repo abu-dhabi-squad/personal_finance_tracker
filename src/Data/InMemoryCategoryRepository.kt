@@ -16,15 +16,15 @@ class InMemoryCategoryRepository: ICategoryRepository {
         return categories.add(Category(trimmedCategory))
     }
 
-    override fun delete(index: Int): Boolean {
+    override fun delete(categoryNumber: Int): Boolean {
         val categoriesSize = categories.size
-        if (index !in 1 .. categoriesSize)
+        if (categoryNumber !in 1 .. categoriesSize)
             return false
-        return categories.remove(categories[index - 1])
+        return categories.remove(categories[categoryNumber - 1])
     }
 
     override fun getAll(): List<Category> {
-        return categories
+        return categories.toList()
     }
 
 }
