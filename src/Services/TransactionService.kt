@@ -1,6 +1,7 @@
 package Services
 
 import Data.ITransactionRepository
+import Data.InMemoryTransactionRepository
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
@@ -12,7 +13,7 @@ import java.util.*
 class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf(),
     private var balance: Double = 0.0,
-    private val transactionRepo: ITransactionRepository,
+    private val transactionRepo: ITransactionRepository = InMemoryTransactionRepository(transactions = transactions, balance = balance),
 ) {
 
     fun getTransactionsSize(): Int = transactions.size
