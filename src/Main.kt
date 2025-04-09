@@ -1,3 +1,4 @@
+import Data.InMemoryTransactionRepository
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
@@ -11,7 +12,8 @@ var list:MutableList<Transaction> = mutableListOf(
     Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
     Transaction(200.0, Category("medical"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID())
 )
-private val reportService: ReportService = ReportService(list)
+private val reportService: ReportService = ReportService(
+    InMemoryTransactionRepository(list))
 
 fun main() {
     showMenu()

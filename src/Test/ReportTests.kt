@@ -1,5 +1,6 @@
 package Test
 
+import Data.InMemoryTransactionRepository
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
@@ -9,7 +10,8 @@ import java.util.*
 
 fun main(){
 
-    var reportService = ReportService(mutableListOf<Transaction>())
+
+    var reportService = ReportService(InMemoryTransactionRepository(mutableListOf<Transaction>()))
 
     // balance test cases
     test("empty list",reportService.getBalance(),0.0 )
@@ -18,19 +20,19 @@ fun main(){
     var list:MutableList<Transaction> = mutableListOf(
         Transaction(1000.0, Category("food"),TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
          )
-    reportService = ReportService(list)
+    reportService = ReportService(InMemoryTransactionRepository(list))
     test("add Income with 1000.0 to list",reportService.getBalance(),1000.0 )
 
 
     list = mutableListOf(
         Transaction(1000.0, Category("food"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
     )
-    reportService = ReportService(list)
+    reportService = ReportService(InMemoryTransactionRepository(list))
     test("add Expenses with 1000.0 to list",reportService.getBalance(),-1000.0 )
 
 
     //getByMonth test cases
-    reportService = ReportService(mutableListOf<Transaction>())
+    reportService = ReportService(InMemoryTransactionRepository(mutableListOf<Transaction>()))
     test("empty list",reportService.getSummaryByMonth(1), mutableListOf<Transaction>())
 
 
@@ -40,7 +42,7 @@ fun main(){
         Transaction(120.0, Category("food"),TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
         Transaction(200.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID())
     )
-    reportService = ReportService(list)
+    reportService = ReportService(InMemoryTransactionRepository(list))
     test("dont have the month in the list",reportService.getSummaryByMonth(1), mutableListOf<Transaction>())
 
 
@@ -53,7 +55,7 @@ fun main(){
         Transaction(200.0, Category("medical"),TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
         Transaction(1000.0, Category("beauty"),TransactionType.EXPENSES, LocalDate.of(2024,1,13),id2),
     )
-    reportService = ReportService(list)
+    reportService = ReportService(InMemoryTransactionRepository(list))
     test(
         "have multiple months in list",
         reportService.getSummaryByMonth(1),

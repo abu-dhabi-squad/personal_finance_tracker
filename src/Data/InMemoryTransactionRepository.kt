@@ -4,7 +4,7 @@ import Models.Transaction
 import Models.UITransaction
 import java.util.*
 
-class InMemoryTransactionRepository : ITransactionRepository {
+class InMemoryTransactionRepository(val transactions: MutableList<Transaction>) : ITransactionRepository {
     override fun add(transaction: Transaction): Boolean {
         TODO("Not yet implemented")
     }
@@ -18,7 +18,7 @@ class InMemoryTransactionRepository : ITransactionRepository {
     }
 
     override fun getAll(): List<Transaction> {
-        TODO("Not yet implemented")
+        return transactions
     }
 
     override fun getBalance(): Double {
