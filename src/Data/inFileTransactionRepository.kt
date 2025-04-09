@@ -48,7 +48,7 @@ class InFileTransactionRepository(private val transactionsFile: File, private va
     }
 
 
-    override fun edit(updatedTransaction: Transaction): Boolean {
+    override fun edit(transaction: Transaction): Boolean {
 //        val transactions = readTransactions()
 //        val index = transactions.indexOfFirst { it.id == id }
 //
