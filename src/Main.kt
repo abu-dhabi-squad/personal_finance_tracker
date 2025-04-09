@@ -3,7 +3,7 @@ import Models.Transaction
 import Models.TransactionType
 import Models.UITransaction
 import Services.TransactionService
-import Services.TransactionValidator
+import Services.TransactionValidatorImplementation
 import java.time.LocalDate
 
 fun main() {
@@ -83,15 +83,12 @@ fun addTransaction(trService: TransactionService) {
         date = date,
         category = category
     )
-    if (TransactionValidator().isValidTransaction(transaction)) {
-        if (trService.addTransaction(transaction)) {
-            println("\nTransaction added successfully!")
-            println(transaction)
-        } else {
-            println("\nTransaction can't be added")
-        }
+
+    if (trService.addTransaction(transaction)) {
+        println("\nTransaction added successfully!")
+        println(transaction)
     } else {
-        println("\nValidation failed, enter valid data")
+        println("\nTransaction can't be added")
     }
 }
 
@@ -118,5 +115,19 @@ fun deleteTransaction(trService: TransactionService) {
 }
 
 fun listAllTransactions(trService: TransactionService) {
-
+    val transactions = trService.listAllTransactions()
+    if (transactions.isEmpty()) {
+        println("No transactions found.")
+    } else {
+        println("All Transactions:")
+        println("****************************************************")
+        transactions.forEach { transaction ->
+            println("ID: ${transaction.id}")
+            println("Amount: ${transaction.amount}")
+            println("Category: ${transaction.category.name}")
+            println("Type: ${transaction.transactionType}")
+            println("Date: ${transaction.date}")
+            println("****************************************************")
+        }
+    }
 }

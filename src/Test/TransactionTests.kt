@@ -1,7 +1,7 @@
 package Test
 
-import Data.InFileTransactionRepository
-import Data.InMemoryTransactionRepository
+import Data.InFileTransactionImplementation
+import Data.InMemoryTransactionImplementation
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
@@ -18,7 +18,6 @@ class TransactionTests() {
     fun runAllTests() {
         println("Transaction Tests")
         testAddTransaction()
-        testCanWithdraw()
         testEditTransaction()
         testDeleteTransactionFromMemory()
         testDeleteTransactionFromFile()
@@ -26,16 +25,9 @@ class TransactionTests() {
     }
 
     private fun testAddTransaction() {
-        val trService = TransactionService(balance = 0.0)
-        val trSizeBefore = trService.getTransactionsSize()
+        val trService = TransactionService()
         val validAddTransactionResult = trService.addTransaction(
             UITransaction(100.0, Category("Test 1"), TransactionType.INCOME, "03-03-2025")
-        )
-        val trSizeAfter = trService.getTransactionsSize()
-        test(
-            name = "check if transaction is added, using checking list size",
-            actualResult = trSizeAfter,
-            expectedResult = trSizeBefore + 1
         )
         test(
             name = "check if transaction is added, using return of add method",
@@ -54,22 +46,6 @@ class TransactionTests() {
             actualResult = trService.addTransaction(
                 UITransaction(200.0, Category("Test 1"), TransactionType.EXPENSES, "03-03-2025")
             ),
-            expectedResult = false
-        )
-    }
-
-    private fun testCanWithdraw() {
-        val trService: TransactionService = TransactionService()
-        var currentBalance = trService.getBalance()
-        test(
-            name = "check if balance is sufficient",
-            actualResult = trService.canWithdraw(100.0),
-            expectedResult = currentBalance >= 100.0
-        )
-        currentBalance = trService.getBalance()
-        test(
-            name = "check if balance is not sufficient",
-            actualResult = trService.canWithdraw(currentBalance + 100),
             expectedResult = false
         )
     }
@@ -106,15 +82,15 @@ class TransactionTests() {
         )
         val invalidEditedTransaction = UITransaction(
             amount = 150.0,
-            date = "2025-04-04",
+            date = "04-04-2025",
             category = Category("Test 2"),
             transactionType = TransactionType.EXPENSES
         )
         val editedTransaction = UITransaction(
             amount = 150.0,
-            date = "2025-04-04",
+            date = "04-04-2025",
             category = Category("Test 2"),
-            transactionType = TransactionType.EXPENSES
+            transactionType = TransactionType.INCOME
         )
         test(
             name = "edit invalid transaction",
@@ -131,7 +107,7 @@ class TransactionTests() {
     private fun testDeleteTransactionFromMemory() {
         val transactions = mutableListOf(
             Transaction(
-                amount = 500.0,
+                amount = 100.0,
                 date = LocalDate.now(),
                 category = Category("Test 1"),
                 transactionType = TransactionType.INCOME
@@ -156,7 +132,7 @@ class TransactionTests() {
             ),
         )
         val trService = TransactionService(
-            transactionRepo = InMemoryTransactionRepository(
+            transactionRepo = InMemoryTransactionImplementation(
                 balance = 0.0,
                 transactions = transactions
             )
@@ -201,9 +177,8 @@ class TransactionTests() {
             ),
         )
         val trService = TransactionService(
-            transactionRepo = InFileTransactionRepository(
+            transactionRepo = InFileTransactionImplementation(
                 transactionsFile = File("out/transactionsTest.txt"),
-                balanceFile = File("out/balanceTest.txt"),
             )
         )
         File("out/transactionsTest.txt").delete()
