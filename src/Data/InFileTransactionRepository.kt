@@ -1,14 +1,10 @@
 package Data
 
-import Models.Category
 import Models.Transaction
 import Models.TransactionType
-import Models.UITransaction
 import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.time.LocalDate
-import java.util.*
 
 class InFileTransactionRepository(private val transactionsFile: File, private val balanceFile: File): ITransactionRepository {
     private fun readTransactions(): MutableList<Transaction> {
@@ -50,12 +46,22 @@ class InFileTransactionRepository(private val transactionsFile: File, private va
     }
 
 
-    override fun edit(id: UUID, transaction: UITransaction): Boolean {
-        val transactions = readTransactions()
-        val index = transactions.indexOfFirst { it.id == id }
-        if (index == -1) return false
-        //transactions[index] = updatedTransaction.copy(id = id)
-        writeTransactions(transactions)
+    override fun edit(transaction: Transaction): Boolean {
+//        val transactions = readTransactions()
+//        val index = transactions.indexOfFirst { it.id == id }
+//
+//        if (index == -1) return false
+//
+//        val originalTransaction = transactions[index]
+//        val editedTransaction = originalTransaction.copy(
+//            amount = if (updatedTransaction.amount != originalTransaction.amount) updatedTransaction.amount else originalTransaction.amount,
+//            category = if (updatedTransaction.category != originalTransaction.category) updatedTransaction.category else originalTransaction.category,
+//            transactionType = if (updatedTransaction.transactionType != originalTransaction.transactionType) updatedTransaction.transactionType else originalTransaction.transactionType,
+//            date = if (updatedTransaction.date != originalTransaction.date) updatedTransaction.date else originalTransaction.date
+//        )
+//
+//        transactions[index] = editedTransaction
+//        writeTransactions(transactions)
         return true
     }
 
