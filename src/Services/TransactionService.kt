@@ -9,7 +9,6 @@ class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf()
 ) {
     private val balance: Double = 1000.0
-        get() { return field}
 
     fun getBalance(): Double {
         return balance
