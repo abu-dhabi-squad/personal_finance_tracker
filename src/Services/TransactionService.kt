@@ -38,32 +38,29 @@ class TransactionService(
         return amount <= balance
     }
 
-    fun editTransaction(id: UUID, updatedTransaction: Transaction): Boolean {
-        // find trans by id
-        val index = transactions.indexOfFirst { it.id == id }
+        fun updateTransaction(id: UUID, uiTransaction: UITransaction): Boolean {
+            val validator = TransactionValidator()
+             val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            // 1. التحقق من صحة البيانات
+            if (!validator.isValidTransaction(uiTransaction)) {
+                return false
+            }
+            // 2. البحث عن المعاملة الحالية
+            val existingIndex = transactions.indexOfFirst { it.id == id }
+            if (existingIndex == -1) throw NoSuchElementException("Transaction not found")
+            val existing = transactions[existingIndex]
 
-        if (index == -1) {
-            // id not found
-            return false
+            // التحديث الجزئي
+            val updatedTransaction = existing.copy(
+                amount = uiTransaction.amount ?: existing.amount,
+                category = uiTransaction.category ?: existing.category,
+                transactionType =uiTransaction.transactionType ?: existing.transactionType,
+                date = uiTransaction.date?.let { LocalDate.parse(it, dateFormatter) } ?: existing.date
+            )
+//
+            transactions[existingIndex] = updatedTransaction
+            return true
         }
-
-        // assign orignal trans
-        val originalTransaction = transactions[index]
-
-        // update fields
-        val transactionToUpdate = originalTransaction.copy(
-            amount = if (updatedTransaction.amount != 0.0) updatedTransaction.amount else originalTransaction.amount,
-            category = updatedTransaction.category.takeIf { it != originalTransaction.category } ?: originalTransaction.category,
-            transactionType = updatedTransaction.transactionType.takeIf { it != originalTransaction.transactionType } ?: originalTransaction.transactionType,
-            date = updatedTransaction.date.takeIf { it != originalTransaction.date } ?: originalTransaction.date
-        )
-
-
-        // save new trans
-        transactions[index] = transactionToUpdate
-
-        return true
-    }
 
 
     fun deleteTransaction(transaction: Transaction): Boolean {

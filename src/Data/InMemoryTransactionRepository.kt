@@ -3,6 +3,8 @@ package Data
 import Models.Transaction
 import Models.TransactionType
 import Models.UITransaction
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class InMemoryTransactionRepository(
@@ -15,7 +17,21 @@ class InMemoryTransactionRepository(
     }
 
     override fun edit(transaction: Transaction): Boolean {
-        TODO("Not yet implemented")
+//        val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+//        val existingIndex = transactions.indexOfFirst { it.id == id }
+//        if (existingIndex == -1) throw NoSuchElementException("Transaction not found")
+//        val existing = transactions[existingIndex]
+//
+//        // التحديث الجزئي
+//        val updatedTransaction = existing.copy(
+//            amount = Transaction.amount ?: existing.amount,
+//            category = Transaction.category ?: existing.category,
+//            transactionType =Transaction.transactionType ?: existing.transactionType,
+//            date = Transaction.date?.let { LocalDate.parse(it.toString(), dateFormatter) } ?: existing.date
+//        )
+//
+//        transactions[existingIndex] = updatedTransaction
+        return true
     }
 
     override fun delete(transaction: Transaction): Boolean {
