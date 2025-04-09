@@ -1,53 +1,11 @@
 import Models.Category
-import Models.Transaction
 import Models.TransactionType
 import Models.UITransaction
 import Services.TransactionService
-import Services.TransactionValidatorImplementation
-import java.time.LocalDate
 
 fun main() {
-    val transactions = mutableListOf<Transaction>(Transaction(
-        amount = 150.0,
-        category = Category("Shopping"),
-        transactionType =TransactionType.INCOME,
-        date = LocalDate.of(2025, 4, 1)
-    ))
-    val tarnsV=TransactionService(transactions)
-    // ترانزاكشن حقيقية
 
-    println("قبل التعديل:")
-    transactions.forEach { println(it) }
-
-    // نحضر نسخة فيها تعديلات
-    val updated = UITransaction(
-        amount = 300.0, // تم تغييره
-        category = Category("Shopping"), // نفس الكاتيجوري
-        transactionType = TransactionType.INCOME, // نفس النوع
-        date = "01-04-2025" // تم تغييره
-    )
-
-    val result = tarnsV.updateTransaction(transactions[0].id,  updated)
-
-    println("\nتم التعديل؟ $result")
-    println("\nبعد التعديل:")
-    transactions.forEach { println(it) }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 fun addTransaction(trService: TransactionService) {
     print("\nEnter amount: ")

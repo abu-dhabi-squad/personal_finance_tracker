@@ -3,10 +3,8 @@ package Data
 import Models.Transaction
 import Models.TransactionType
 
-class InMemoryTransactionImplementation(
-    private val transactions: MutableList<Transaction> = mutableListOf(),
-    private var balance: Double = 0.0,
-) : TransactionInterface {
+class InMemoryTransactionImplementation: TransactionInterface {
+    private val transactions: MutableList<Transaction> = mutableListOf()
 
     override fun add(transaction: Transaction): Boolean {
         if (transaction.transactionType == TransactionType.EXPENSES && !canWithdraw(transaction.amount)) return false
@@ -24,19 +22,17 @@ class InMemoryTransactionImplementation(
         if (transactions.contains(transaction)) {
             if (transaction.transactionType == TransactionType.INCOME && !canWithdraw(transaction.amount)) return false
             val success = transactions.remove(transaction)
-            if (success) {
-                when(transaction.transactionType) {
-                    TransactionType.INCOME -> balance -= transaction.amount
-                    TransactionType.EXPENSES -> balance += transaction.amount
-                }
-                return true
-            }
+            if (success) return true
         }
         return false
     }
 
     override fun getAll(): List<Transaction> {
         return transactions
+    }
+
+    override fun getByMonth(month: Int, year: Int): List<Transaction> {
+        return transactions.filter { transaction: Transaction -> transaction.date.month.value == month && transaction.date.year == year }.toList()
     }
 
     private fun getBalance(): Double {

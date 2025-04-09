@@ -4,17 +4,18 @@ import Models.Category
 import Models.TransactionType
 import Models.UITransaction
 import Services.TransactionValidatorImplementation
+import Utils.DateParserImplementation
 
 class TransactionValidatorTest {
 
     fun runAllTests() {
-        println("Transaction Validator Tests")
+        println("\n\n${"#".repeat(10)} Transaction Validator Tests ${"#".repeat(10)}\n\n")
         testValidation()
     }
 
     private fun testValidation() {
-        val trValidator = TransactionValidatorImplementation()
-
+        println("\n${"*".repeat(10)} Test Validations ${"*".repeat(10)}\n")
+        val trValidator = TransactionValidatorImplementation(DateParserImplementation())
         var tr = UITransaction(
             amount = 150.0,
             date = "08-04-2025",

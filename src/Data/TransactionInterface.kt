@@ -7,4 +7,5 @@ interface TransactionInterface {
     fun edit(transaction: Transaction): Boolean
     fun delete(transaction: Transaction): Boolean
     fun getAll(): List<Transaction>
+    fun getByMonth(month: Int, year: Int): List<Transaction>
 }

@@ -32,7 +32,6 @@ class InFileTransactionImplementation(private val transactionsFile: File) : Tran
         return result
     }
 
-
     override fun edit(transaction: Transaction): Boolean {
         val transactions = readTransactions()
         val index = transactions.indexOfFirst { it.id == transaction.id }
@@ -57,6 +56,11 @@ class InFileTransactionImplementation(private val transactionsFile: File) : Tran
 
     override fun getAll(): List<Transaction> {
         return TransactionFileHelper.readTransactions(transactionsFile)
+    }
+
+    override fun getByMonth(month: Int, year: Int): List<Transaction> {
+        val transactions = readTransactions()
+        return transactions.filter { transaction: Transaction -> transaction.date.month.value == month && transaction.date.year == year }.toList()
     }
 
     private fun getBalance(): Double {
