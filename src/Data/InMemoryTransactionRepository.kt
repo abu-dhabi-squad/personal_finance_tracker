@@ -14,7 +14,7 @@ class InMemoryTransactionRepository(
         TODO("Not yet implemented")
     }
 
-    override fun edit(id: UUID, transaction: UITransaction): Boolean {
+    override fun edit(transaction: Transaction): Boolean {
         TODO("Not yet implemented")
     }
 
