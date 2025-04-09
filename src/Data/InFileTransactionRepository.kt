@@ -7,7 +7,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.*
 
-class inFileTransactionRepository(private val file: File):ITransactionRepository
+class InFileTransactionRepository(private val file: File):ITransactionRepository
 //لما هناخد اسم الفايل من برا هسهل علينا التعديلات واقدر اغير في نوع واسم الفايل براحتي
 {
     private fun readTransactions(): MutableList<Transaction> {
