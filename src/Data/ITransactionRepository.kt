@@ -7,7 +7,7 @@ import java.util.*
 interface ITransactionRepository {
 
     fun add(transaction: Transaction): Boolean
-    fun edit(id: UUID, transaction: UITransaction): Boolean
+    fun edit(id: UUID, updatedTransaction: Transaction): Boolean
     fun delete(id: UUID): Boolean
     fun getAll(): List<Transaction>
     fun getBalance(): Double

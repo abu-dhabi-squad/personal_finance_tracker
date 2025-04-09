@@ -31,11 +31,21 @@ class inFileTransactionRepository(private val file: File):ITransactionRepository
     }
 
 
-    override fun edit(id: UUID, transaction: UITransaction): Boolean {
+    override fun edit(id: UUID, updatedTransaction: Transaction): Boolean {
         val transactions = readTransactions()
         val index = transactions.indexOfFirst { it.id == id }
+
         if (index == -1) return false
-        //transactions[index] = updatedTransaction.copy(id = id)
+
+        val originalTransaction = transactions[index]
+        val editedTransaction = originalTransaction.copy(
+            amount = if (updatedTransaction.amount != originalTransaction.amount) updatedTransaction.amount else originalTransaction.amount,
+            category = if (updatedTransaction.category != originalTransaction.category) updatedTransaction.category else originalTransaction.category,
+            transactionType = if (updatedTransaction.transactionType != originalTransaction.transactionType) updatedTransaction.transactionType else originalTransaction.transactionType,
+            date = if (updatedTransaction.date != originalTransaction.date) updatedTransaction.date else originalTransaction.date
+        )
+
+        transactions[index] = editedTransaction
         writeTransactions(transactions)
         return true
     }

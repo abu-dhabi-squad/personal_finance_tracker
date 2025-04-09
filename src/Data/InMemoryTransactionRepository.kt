@@ -5,11 +5,12 @@ import Models.UITransaction
 import java.util.*
 
 class InMemoryTransactionRepository : ITransactionRepository {
+    //private val transactions = mutableListOf<Transaction>()
     override fun add(transaction: Transaction): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun edit(id: UUID, transaction: UITransaction): Boolean {
+    override fun edit(id: UUID, updatedTransaction: Transaction): Boolean {
         TODO("Not yet implemented")
     }
 

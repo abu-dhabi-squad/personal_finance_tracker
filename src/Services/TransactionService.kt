@@ -35,106 +35,33 @@ class TransactionService(
         return amount <= balance
     }
 
-    fun editTransaction(id: UUID, transaction: UITransaction): Boolean
-    {
-        fun editTransaction(id: UUID, uiTransaction: UITransaction): Boolean {
-            val index = transactions.indexOfFirst { it.id == id }
-//هنا انا ممكن استخدم mutlablemap هيخلي ال time complexity ==o(1) بدل ما هو هيكون o(n)
-            if (index == -1) return false
+    fun editTransaction(id: UUID, updatedTransaction: Transaction): Boolean {
+        // find trans by id
+        val index = transactions.indexOfFirst { it.id == id }
 
-            val existingTransaction = transactions[index]
-
-            val updatedTransaction = chooseFieldToEdit(existingTransaction)
-
-            transactions[index] = updatedTransaction
-            return true
+        if (index == -1) {
+            // id not found
+            return false
         }
 
-        return false
+        // assign orignal trans
+        val originalTransaction = transactions[index]
+
+        // update fields
+        val transactionToUpdate = originalTransaction.copy(
+            amount = if (updatedTransaction.amount != 0.0) updatedTransaction.amount else originalTransaction.amount,
+            category = updatedTransaction.category.takeIf { it != originalTransaction.category } ?: originalTransaction.category,
+            transactionType = updatedTransaction.transactionType.takeIf { it != originalTransaction.transactionType } ?: originalTransaction.transactionType,
+            date = updatedTransaction.date.takeIf { it != originalTransaction.date } ?: originalTransaction.date
+        )
+
+
+        // save new trans
+        transactions[index] = transactionToUpdate
+
+        return true
     }
-    fun getEditChoice(): Int? {
-        println("Which field would you like to edit?")
-        println("1. Amount")
-        println("2. Category")
-        println("3. Transaction Type")
-        println("4. Date")
-        println("5. All fields")
-        print("Enter the number of the field to edit: ")
 
-        return readLine()?.toIntOrNull()
-    }
-
-    fun chooseFieldToEdit(transaction: Transaction): Transaction {
-
-        val choice = getEditChoice()
-        return when (choice) {
-            1 -> {
-                print("Enter new amount: ")
-                val newAmount = readLine()?.toDoubleOrNull()
-                if (newAmount != null) transaction.copy(amount = newAmount) else transaction
-            }
-            2 -> {
-                print("Enter new category name: ")
-                val newCategory = readLine()?.trim()
-                if (!newCategory.isNullOrEmpty()) transaction.copy(category = Category(newCategory)) else transaction
-            }
-            3 -> {
-                println("Enter new transaction type (INCOME / EXPENSES): ")
-                val newTypeInput = readLine()?.trim()?.uppercase()
-                val newType = try {
-                    TransactionType.valueOf(newTypeInput!!)
-                } catch (e: Exception) {
-                    null
-                }
-                if (newType != null) transaction.copy(transactionType = newType) else transaction
-            }
-            4 -> {
-                print("Enter new date (yyyy-MM-dd): ")
-                val newDateInput = readLine()
-                val newDate = try {
-                    LocalDate.parse(newDateInput)
-                } catch (e: Exception) {
-                    null
-                }
-                if (newDate != null) transaction.copy(date = newDate) else transaction
-            }
-            5 -> {
-                print("Enter new amount: ")
-                val newAmount = readLine()?.toDoubleOrNull() ?: transaction.amount
-
-                print("Enter new category name: ")
-                val newCategoryName = readLine()?.trim()
-                val newCategory = if (!newCategoryName.isNullOrEmpty()) Category(newCategoryName) else transaction.category
-
-                println("Enter new transaction type (INCOME / EXPENSES): ")
-                val newTypeInput = readLine()?.trim()?.uppercase()
-                val newTransactionType = try {
-                    TransactionType.valueOf(newTypeInput!!)
-                } catch (e: Exception) {
-                    null
-                } ?: transaction.transactionType
-
-                print("Enter new date (yyyy-MM-dd): ")
-                val newDateInput = readLine()
-                val newDate = try {
-                    LocalDate.parse(newDateInput)
-                } catch (e: Exception) {
-                    null
-                } ?: transaction.date
-
-                transaction.copy(
-                    amount = newAmount,
-                    category = newCategory,
-                    transactionType = newTransactionType,
-                    date = newDate
-                )
-            }
-            else -> {
-                println("Invalid choice. No changes made.")
-                transaction
-            }
-        }
-    }
 
 
     fun isTransactionExists(transaction: Transaction): Boolean {
