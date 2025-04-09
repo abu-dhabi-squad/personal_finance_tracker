@@ -114,12 +114,12 @@ class TransactionTests() {
         )
         test(
             name = "edit invalid transaction",
-            actualResult = trService.editTransaction(UUID.randomUUID(), invalidEditedTransaction),
+            actualResult = trService.updateTransaction(UUID.randomUUID(), invalidEditedTransaction),
             expectedResult = false
         )
         test(
             name = "edit transaction",
-            actualResult = trService.editTransaction(transactions[0].id, editedTransaction),
+            actualResult = trService.updateTransaction(transactions[0].id, editedTransaction),
             expectedResult = true
         )
     }
