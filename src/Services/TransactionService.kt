@@ -1,5 +1,7 @@
 package Services
 
+import Data.ITransactionRepository
+import Data.InMemoryTransactionRepository
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
@@ -11,6 +13,7 @@ import java.util.*
 class TransactionService(
     private val transactions: MutableList<Transaction> = mutableListOf(),
     private var balance: Double = 0.0,
+    private val transactionRepo: ITransactionRepository = InMemoryTransactionRepository(transactions = transactions, balance = balance),
 ) {
 
     fun getTransactionsSize(): Int = transactions.size
@@ -136,24 +139,8 @@ class TransactionService(
         }
     }
 
-
-    fun isTransactionExists(transaction: Transaction): Boolean {
-        return transactions.contains(transaction)
-    }
-
     fun deleteTransaction(transaction: Transaction): Boolean {
-        if (isTransactionExists(transaction)) {
-            if (transaction.transactionType == TransactionType.INCOME && !canWithdraw(transaction.amount)) return false
-            val success = transactions.remove(transaction)
-            if (success) {
-                when(transaction.transactionType) {
-                    TransactionType.INCOME -> balance -= transaction.amount
-                    TransactionType.EXPENSES -> balance += transaction.amount
-                }
-                return true
-            }
-        }
-        return false
+        return transactionRepo.delete(transaction)
     }
 
     fun listAllTransactions(): List<Transaction> {

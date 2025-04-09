@@ -1,12 +1,16 @@
 package Test
 
+import Data.InFileTransactionRepository
+import Data.InMemoryTransactionRepository
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
 import Models.UITransaction
 import Services.TransactionService
+import java.io.File
+import java.io.ObjectOutputStream
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 // Add test functions for every feature and call it in main test file
 
@@ -16,8 +20,8 @@ class TransactionTests() {
         testAddTransaction()
         testCanWithdraw()
         testEditTransaction()
-        testIsTransactionExists()
-        testDeleteTransaction()
+        testDeleteTransactionFromMemory()
+        testDeleteTransactionFromFile()
         testListAllTransactions()
     }
 
@@ -124,55 +128,7 @@ class TransactionTests() {
         )
     }
 
-    private fun testIsTransactionExists() {
-        val transactions = mutableListOf(
-            Transaction(
-                amount = 100.0,
-                date = LocalDate.now(),
-                category = Category("Test 1"),
-                transactionType = TransactionType.INCOME
-            ),
-            Transaction(
-                amount = 200.0,
-                date = LocalDate.now(),
-                category = Category("Test 1"),
-                transactionType = TransactionType.EXPENSES
-            ),
-            Transaction(
-                amount = 300.0,
-                date = LocalDate.now(),
-                category = Category("Test 2"),
-                transactionType = TransactionType.INCOME
-            ),
-            Transaction(
-                amount = 150.0,
-                date = LocalDate.now(),
-                category = Category("Test 2"),
-                transactionType = TransactionType.EXPENSES
-            ),
-        )
-        val trService = TransactionService(
-            transactions = transactions
-        )
-        val invalidTransaction = Transaction(
-            amount = 150.0,
-            date = LocalDate.now(),
-            category = Category("Test 1"),
-            transactionType = TransactionType.EXPENSES
-        )
-        test(
-            name = "check if transaction not exists",
-            actualResult = trService.isTransactionExists(invalidTransaction),
-            expectedResult = false
-        )
-        test(
-            name = "check if transaction exists",
-            actualResult = trService.isTransactionExists(transactions[1]),
-            expectedResult = true
-        )
-    }
-
-    private fun testDeleteTransaction() {
+    private fun testDeleteTransactionFromMemory() {
         val transactions = mutableListOf(
             Transaction(
                 amount = 500.0,
@@ -200,25 +156,82 @@ class TransactionTests() {
             ),
         )
         val trService = TransactionService(
-            balance = 0.0,
-            transactions = transactions
-        )
-        val trSizeBefore = trService.getTransactionsSize()
-        val deleteTransactionResult = trService.deleteTransaction(transactions[1])
-        val trSizeAfter = trService.getTransactionsSize()
-        test(
-            name = "check if transaction is deleted, using checking list size",
-            actualResult = trSizeAfter,
-            expectedResult = trSizeBefore - 1
+            transactionRepo = InMemoryTransactionRepository(
+                balance = 0.0,
+                transactions = transactions
+            )
         )
         test(
-            name = "check if transaction is deleted, using return of add method",
-            actualResult = deleteTransactionResult,
+            name = "check if transaction is deleted from Memory, using return of add method",
+            actualResult = trService.deleteTransaction(transactions[1]),
             expectedResult = true
         )
         test(
-            name = "check if transaction is not deleted, as it is INCOME and current balance is not sufficient for returning money",
+            name = "check if transaction is not deleted from Memory, as it is INCOME and current balance is not sufficient for returning money",
             actualResult = trService.deleteTransaction(transactions[1]),
+            expectedResult = false
+        )
+    }
+
+    private fun testDeleteTransactionFromFile() {
+        val transactions = mutableListOf(
+            Transaction(
+                amount = 500.0,
+                date = LocalDate.now(),
+                category = Category("Test 1"),
+                transactionType = TransactionType.INCOME
+            ),
+            Transaction(
+                amount = 200.0,
+                date = LocalDate.now(),
+                category = Category("Test 1"),
+                transactionType = TransactionType.EXPENSES
+            ),
+            Transaction(
+                amount = 300.0,
+                date = LocalDate.now(),
+                category = Category("Test 2"),
+                transactionType = TransactionType.INCOME
+            ),
+            Transaction(
+                amount = 150.0,
+                date = LocalDate.now(),
+                category = Category("Test 2"),
+                transactionType = TransactionType.EXPENSES
+            ),
+        )
+        val trService = TransactionService(
+            transactionRepo = InFileTransactionRepository(
+                transactionsFile = File("out/transactionsTest.txt"),
+                balanceFile = File("out/balanceTest.txt"),
+            )
+        )
+        File("out/transactionsTest.txt").delete()
+        test(
+            name = "check if transaction is not deleted from File, as transactions file not found",
+            actualResult = trService.deleteTransaction(transactions[1]),
+            expectedResult = false
+        )
+        ObjectOutputStream(File("out/transactionsTest.txt").outputStream()).use {
+            it.writeObject(mutableListOf<Transaction>())
+        }
+        test(
+            name = "check if transaction is not deleted from File, as no transactions in the file",
+            actualResult = trService.deleteTransaction(transactions[1]),
+            expectedResult = false
+        )
+        val inFileTransactions = transactions.toMutableList()
+        ObjectOutputStream(File("out/transactionsTest.txt").outputStream()).use {
+            it.writeObject(transactions)
+        }
+        test(
+            name = "check if transaction is deleted from File",
+            actualResult = trService.deleteTransaction(inFileTransactions[1]),
+            expectedResult = true
+        )
+        test(
+            name = "check if transaction is not deleted from File, as it is INCOME and current balance is not sufficient for returning money",
+            actualResult = trService.deleteTransaction(inFileTransactions[1]),
             expectedResult = false
         )
     }
