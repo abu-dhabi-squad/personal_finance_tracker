@@ -21,4 +21,13 @@ class InMemoryTransactionRepository(val transactions: MutableList<Transaction>) 
         return transactions.toList()
     }
 
+    override
+    fun getTransactionByMonth(month: Int, year: Int): List<Transaction> {
+        if (month in 1..12) {
+            val transactions = getAll()
+            return transactions.filter { transaction -> transaction.date.month.value == month && transaction.date.year == year }
+        }
+        return listOf()
+    }
+
 }

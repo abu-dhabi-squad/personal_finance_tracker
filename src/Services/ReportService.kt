@@ -1,8 +1,9 @@
 package Services
 
 import Data.ITransactionRepository
-import Models.Transaction
+import Models.MonthTransactions
 import Models.TransactionType
+import java.time.LocalDate
 
 class ReportService(private val iTransactionRepository: ITransactionRepository) {
 
@@ -18,11 +19,18 @@ class ReportService(private val iTransactionRepository: ITransactionRepository) 
         return balance
     }
 
-    fun getSummaryByMonth(month: Int): List<Transaction> {
-        if (month in 1..12) {
-            val transactions = iTransactionRepository.getAll()
-            return transactions.filter { transaction -> transaction.date.month.value == month }
+    fun getSummaryByMonth(month: Int, year: Int): MonthTransactions {
+        if (month in 1..12 && year in 1900..LocalDate.now().year) {
+            val transactions = iTransactionRepository.getTransactionByMonth(month, year)
+            var totalIncome = 0.0
+            var totalExpenses = 0.0
+            transactions.forEach { transaction ->
+                if (transaction.transactionType == TransactionType.INCOME)
+                    totalIncome += transaction.amount
+                else totalExpenses += transaction.amount
+            }
+            return MonthTransactions(month, year, totalIncome, totalExpenses, transactions)
         }
-        return listOf()
+        return MonthTransactions(month, year, 0.0, 0.0, listOf())
     }
 }

@@ -2,6 +2,7 @@ package Test
 
 import Data.InMemoryTransactionRepository
 import Models.Category
+import Models.MonthTransactions
 import Models.Transaction
 import Models.TransactionType
 import Services.ReportService
@@ -10,6 +11,7 @@ import java.util.*
 
 fun main() {
     // balance test cases
+
     var reportService = ReportService(InMemoryTransactionRepository(mutableListOf<Transaction>()))
     test("empty list", reportService.getBalance(), 0.0)
 
@@ -35,7 +37,7 @@ fun main() {
 
     //getByMonth test cases
     reportService = ReportService(InMemoryTransactionRepository(mutableListOf<Transaction>()))
-    test("empty list", reportService.getSummaryByMonth(1), mutableListOf<Transaction>())
+    test("empty list", reportService.getSummaryByMonth(1, 2025), MonthTransactions(1, 2025, 0.0, 0.0, listOf()))
 
     list = mutableListOf(
         Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
@@ -44,7 +46,24 @@ fun main() {
         Transaction(200.0, Category("medical"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID())
     )
     reportService = ReportService(InMemoryTransactionRepository(list))
-    test("dont have the month in the list", reportService.getSummaryByMonth(1), mutableListOf<Transaction>())
+    test(
+        "dont have the month in the list",
+        reportService.getSummaryByMonth(1, 2025),
+        MonthTransactions(1, 2025, 0.0, 0.0, listOf())
+    )
+
+    list = mutableListOf(
+        Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
+        Transaction(10.0, Category("medical"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()),
+        Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()),
+        Transaction(200.0, Category("medical"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID())
+    )
+    reportService = ReportService(InMemoryTransactionRepository(list))
+    test(
+        "dont have the year in the list",
+        reportService.getSummaryByMonth(1, 0),
+        MonthTransactions(1, 0, 0.0, 0.0, listOf())
+    )
 
     val id1 = UUID.randomUUID()
     val id2 = UUID.randomUUID()
@@ -58,13 +77,16 @@ fun main() {
     reportService = ReportService(InMemoryTransactionRepository(list))
     test(
         "have multiple months in list",
-        reportService.getSummaryByMonth(1),
-        listOf(
-            Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1),
-            Transaction(1000.0, Category("beauty"), TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2),
+        reportService.getSummaryByMonth(1, 2024),
+        MonthTransactions(
+            1, 2024, 120.0, 1000.0, listOf(
+                Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1),
+                Transaction(1000.0, Category("beauty"), TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2),
+            )
         )
+
     )
 
-    test("invalid month", reportService.getSummaryByMonth(13), mutableListOf<Transaction>())
+    test("invalid month", reportService.getSummaryByMonth(13, 2025), MonthTransactions(13, 2025, 0.0, 0.0, listOf()))
 
 }
