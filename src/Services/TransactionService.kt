@@ -20,6 +20,7 @@ class TransactionService(
             date = dateParser.parseDateFromString(transaction.date),
         )
         return transactionData.add(newTransaction)
+    }
     private val balance: Double = 1000.0
 
     fun getBalance(): Double {

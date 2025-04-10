@@ -4,7 +4,7 @@ import Models.Category
 import Services.CategoryService
 import src.Data.InFileCategory
 import src.Data.InMemoryCategory
-import src.Util.CategoryValidatorName
+import src.Utils.CategoryValidatorName
 import java.io.File
 
 fun main() {

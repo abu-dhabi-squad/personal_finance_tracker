@@ -2,7 +2,7 @@ package Services
 
 import Models.Category
 import src.Data.CategoryInterface
-import src.Util.CategoryValidatorInterface
+import src.Utils.CategoryValidatorInterface
 
 class CategoryService(private val categoryInterface: CategoryInterface, private val categoryValidatorInterface: CategoryValidatorInterface) {
 
