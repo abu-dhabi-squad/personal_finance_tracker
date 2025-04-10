@@ -1,9 +1,12 @@
 package Test
 
+import CategoryTests
+
 fun main() {
     TransactionTests().runAllTests()
     TransactionValidatorTest().runAllTests()
     ReportTests().runAllTestCases()
+    CategoryTests().runAllTestCases()
 }
 
 fun test(name: String, actualResult: Any, expectedResult: Any) {

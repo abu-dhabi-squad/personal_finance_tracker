@@ -1,6 +1,7 @@
 import Models.Category
 import Models.TransactionType
 import Models.UITransaction
+import Services.CategoryService
 import Services.TransactionService
 
 fun main() {
@@ -88,4 +89,19 @@ fun listAllTransactions(trService: TransactionService) {
             println("****************************************************")
         }
     }
+}
+
+fun listAllCategories(categoriesService: CategoryService) {
+    //var menuText = "categories: -\n"
+    val allCategories=categoriesService.getAllCategories()
+    if (allCategories.isNotEmpty()) {
+        println("categories: -")
+        allCategories.forEachIndexed { index, category ->
+            //menuText += "${index + 1}) ${category.name}\n"
+            println("${index + 1}) ${category.name}")
+        }
+    } else {
+        println("No Categories found!")
+    }
+    //return menuText
 }
