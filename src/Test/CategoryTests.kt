@@ -2,46 +2,93 @@ package Test
 
 import Models.Category
 import Services.CategoryService
-import src.Data.InMemoryCategoryRepository
+import src.Data.InFileCategory
+import src.Data.InMemoryCategory
+import src.Util.CategoryValidatorName
+import java.io.File
 
 fun main() {
     val categoryTest = CategoryTests()
-    categoryTest.testAddCategory()
+
+    categoryTest.testAddCategoryInMemory()
+    categoryTest.testDeleteCategoryInMemory()
+    categoryTest.testGetAllCategoryInMemory()
+
+    categoryTest.testAddCategoryInFile()
+    categoryTest.testDeleteCategoryInFile()
+    categoryTest.testGetAllCategoryInFile()
 }
+
 class CategoryTests {
-
-
-    fun testAddCategory() {
-        val category = CategoryService(InMemoryCategoryRepository())
-
-        test("check add new category", true,
-            category.addCategory(Category("Shopping")))
-
-        test("check if a new category is empty", false,
-            category.addCategory(Category("")))
-
-        test("check if the category has an invalid char", false,
-            category.addCategory(Category("Re^%nt")))
-
+    fun testAddCategoryInMemory() {
+        val categoryService = CategoryService(InMemoryCategory(), CategoryValidatorName())
+        test(
+            "check add new category", true,
+            categoryService.addCategory(Category("Shopping"))
+        )
+        test(
+            "check if a new category is empty", false,
+            categoryService.addCategory(Category(""))
+        )
     }
 
-
-    fun testDeleteCategory() {
-        val category: CategoryService = CategoryService(InMemoryCategoryRepository())
-        val categorySize=category.getAllCategories().size
-
-        test("check if the category deleted", true,
-            category.deleteCategory(0))
-
-        test("check if the index is out of range", false,
-            category.deleteCategory(categorySize))
-
+    fun testDeleteCategoryInMemory() {
+        val categoryService: CategoryService = CategoryService(InMemoryCategory(), CategoryValidatorName())
+        val category = Category("Shopping")
+        categoryService.addCategory(category)
+        test(
+            "check if the category deleted", true,
+            categoryService.deleteCategory(Category("Shopping"))
+        )
     }
 
-    //Todo
-    fun testGetAllCategory() {
-        //val category: CategoryService = CategoryService()
+    fun testGetAllCategoryInMemory() {
+        val categoryService: CategoryService = CategoryService(InMemoryCategory(), CategoryValidatorName())
+        categoryService.addCategory(Category("Rent"))
+        val testList = listOf(Category("Rent"))
+        val result = categoryService.getAllCategories() == testList
+        test(
+            "check if Category service return a valid list", false,
+            result
+        )
+    }
 
+    fun testAddCategoryInFile() {
+        val categoryService = CategoryService(InFileCategory(File(CATEGORY_FILE_NAME)), CategoryValidatorName())
+        test(
+            "check add new category", true,
+            categoryService.addCategory(Category("Shopping"))
+        )
+        test(
+            "check if a new category is empty", false,
+            categoryService.addCategory(Category(""))
+        )
+    }
 
+    fun testGetAllCategoryInFile() {
+        val categoryService: CategoryService =
+            CategoryService(InFileCategory(File(CATEGORY_FILE_NAME)), CategoryValidatorName())
+        categoryService.addCategory(Category("Rent"))
+        val testList = listOf(Category("Rent"))
+        val result = categoryService.getAllCategories() == testList
+        test(
+            "check if Category service return a valid list", false,
+            result
+        )
+    }
+
+    fun testDeleteCategoryInFile() {
+        val categoryService: CategoryService =
+            CategoryService(InFileCategory(File(CATEGORY_FILE_NAME)), CategoryValidatorName())
+        val category = Category("Shopping")
+        categoryService.addCategory(category)
+        test(
+            "check if the category deleted", true,
+            categoryService.deleteCategory(Category("Shopping"))
+        )
+    }
+
+    companion object {
+        const val CATEGORY_FILE_NAME = "category"
     }
 }

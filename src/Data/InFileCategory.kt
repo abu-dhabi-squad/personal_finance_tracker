@@ -3,7 +3,7 @@ package src.Data
 import Models.Category
 import java.io.File
 
-class InFileCategoryRepository(private val categoryFile:File):ICategoryRepository {
+class InFileCategory(private val categoryFile: File) : CategoryInterface {
 
     override fun add(category: Category): Boolean {
         val categories = CategoryFileHelper.readCategories(categoryFile)
@@ -12,20 +12,14 @@ class InFileCategoryRepository(private val categoryFile:File):ICategoryRepositor
         return true
     }
 
-    override fun delete(categoryNumber: Int): Boolean {
+    override fun delete(category: Category): Boolean {
         val categories = CategoryFileHelper.readCategories(categoryFile)
-        val categoriesSize = categories.size
-        if (categoryNumber !in 1 .. categoriesSize)
-            return false
-        val isRemoved =  categories.remove(categories[categoryNumber - 1])
-
+        val isRemoved = categories.removeIf { it.name == category.name }
         CategoryFileHelper.writeCategories(categoryFile, categories)
         return isRemoved
-
     }
 
     override fun getAll(): List<Category> {
         return CategoryFileHelper.readCategories(categoryFile)
     }
-
 }
