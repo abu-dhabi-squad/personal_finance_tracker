@@ -11,9 +11,9 @@ class ReportService(private val transactionInterface: TransactionInterface) {
         val transactions = transactionInterface.getAll()
         var balance = 0.0
         transactions.forEach { transaction ->
-            when (transaction.transactionType.name) {
-                TransactionType.INCOME.toString() -> balance += transaction.amount
-                TransactionType.EXPENSES.toString() -> balance -= transaction.amount
+            when (transaction.transactionType) {
+                TransactionType.INCOME -> balance += transaction.amount
+                TransactionType.EXPENSES -> balance -= transaction.amount
             }
         }
         return balance
