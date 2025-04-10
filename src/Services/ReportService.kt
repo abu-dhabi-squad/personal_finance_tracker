@@ -5,10 +5,10 @@ import Models.MonthTransactions
 import Models.TransactionType
 import java.time.LocalDate
 
-class ReportService(private val TransactionInterface: TransactionInterface) {
+class ReportService(private val transactionInterface: TransactionInterface) {
 
     fun getBalance(): Double {
-        val transactions = TransactionInterface.getAll()
+        val transactions = transactionInterface.getAll()
         var balance = 0.0
         transactions.forEach { transaction ->
             when (transaction.transactionType.name) {
@@ -21,7 +21,7 @@ class ReportService(private val TransactionInterface: TransactionInterface) {
 
     fun getSummaryByMonth(month: Int, year: Int): MonthTransactions {
         if (month in 1..12 && year in 1900..LocalDate.now().year) {
-            val transactions = TransactionInterface.getByMonth(month, year)
+            val transactions = transactionInterface.getByMonth(month, year)
             var totalIncome = 0.0
             var totalExpenses = 0.0
             transactions.forEach { transaction ->

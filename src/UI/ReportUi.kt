@@ -32,10 +32,9 @@ private fun getMonthlySummaryFormat(reportService: ReportService, month: Int, ye
     monthTransactions.transactions.forEach { trans ->
         result += String.format("%-18s |", trans.amount.toString()) + "  " +
                 String.format("%-18s |", trans.category.name) + "  " +
-                String.format("%-18s |", trans.transactionType.name.toString()) + "  " +
+                String.format("%-18s |", trans.transactionType.name) + "  " +
                 String.format("%-18s |", trans.date.toString()) + "\n"
     }
-    //println(String.format("%10d,",12))
     return result
 }
 
