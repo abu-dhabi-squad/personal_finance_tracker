@@ -1,4 +1,3 @@
-package Test
 
 import Models.Category
 import Services.CategoryService

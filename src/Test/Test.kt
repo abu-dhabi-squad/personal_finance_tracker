@@ -3,6 +3,7 @@ package Test
 fun main() {
     TransactionTests().runAllTests()
     TransactionValidatorTest().runAllTests()
+    ReportTests().runAllTestCases()
 }
 
 fun test(name: String, actualResult: Any, expectedResult: Any) {
