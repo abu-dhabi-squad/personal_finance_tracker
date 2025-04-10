@@ -8,7 +8,6 @@ import Models.Transaction
 import Models.TransactionType
 import Services.ReportService
 import Services.ReportValidatorImplementation
-import Services.ReportValidatorInterface
 import java.io.File
 import java.time.LocalDate
 import java.util.*
