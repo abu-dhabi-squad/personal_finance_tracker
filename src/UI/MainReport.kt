@@ -5,6 +5,7 @@ import Models.Category
 import Models.Transaction
 import Models.TransactionType
 import Services.ReportService
+import Services.ReportValidatorImplementation
 import java.time.LocalDate
 import java.util.*
 
@@ -14,7 +15,8 @@ fun main() {
     memory.add(Transaction(10.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
     memory.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
     memory.add(Transaction(200.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
-    val reportService = ReportService(memory)
+    val reportValidatorImplementation = ReportValidatorImplementation()
+    val reportService = ReportService(memory,reportValidatorImplementation)
     showMenu(reportService)
 }
 
