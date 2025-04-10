@@ -1,14 +1,14 @@
 package Services
 
-import Data.ITransactionRepository
+import Data.TransactionInterface
 import Models.MonthTransactions
 import Models.TransactionType
 import java.time.LocalDate
 
-class ReportService(private val iTransactionRepository: ITransactionRepository) {
+class ReportService(private val TransactionInterface: TransactionInterface) {
 
     fun getBalance(): Double {
-        val transactions = iTransactionRepository.getAll()
+        val transactions = TransactionInterface.getAll()
         var balance = 0.0
         transactions.forEach { transaction ->
             when (transaction.transactionType.name) {
@@ -21,7 +21,7 @@ class ReportService(private val iTransactionRepository: ITransactionRepository) 
 
     fun getSummaryByMonth(month: Int, year: Int): MonthTransactions {
         if (month in 1..12 && year in 1900..LocalDate.now().year) {
-            val transactions = iTransactionRepository.getTransactionByMonth(month, year)
+            val transactions = TransactionInterface.getByMonth(month, year)
             var totalIncome = 0.0
             var totalExpenses = 0.0
             transactions.forEach { transaction ->

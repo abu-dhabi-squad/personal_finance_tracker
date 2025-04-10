@@ -28,8 +28,8 @@ private fun getMonthlySummaryFormat(reportService: ReportService, month: Int, ye
     result += "total transaction in month = " + monthTransactions.transactions.size + "\n"
     result += "total income in month = " + monthTransactions.totalIncome + "\n"
     result += "total expenses in month = " + monthTransactions.totalExpenses + "\n\n"
-    result += String.format("%-18s |%-18s |%-18s |%-18s |\n", "amount", "category", "transactionType", "date")
-    list.forEach { trans ->
+    result += String.format("%-18s | %-18s  | %-18s  | %-18s  |\n", "amount", "category", "transaction Type", "date")
+    monthTransactions.transactions.forEach { trans ->
         result += String.format("%-18s |", trans.amount.toString()) + "  " +
                 String.format("%-18s |", trans.category.name) + "  " +
                 String.format("%-18s |", trans.transactionType.name.toString()) + "  " +
