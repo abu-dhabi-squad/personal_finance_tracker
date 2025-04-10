@@ -21,11 +21,6 @@ class TransactionService(
         )
         return transactionData.add(newTransaction)
     }
-    private val balance: Double = 1000.0
-
-    fun getBalance(): Double {
-        return balance
-    }
 
     fun updateTransaction(id: UUID, uiTransaction: UITransaction): Boolean {
         if (!validator.isValidAmount(uiTransaction.amount) || !validator.isValidDate(uiTransaction.date)) return false

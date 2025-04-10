@@ -1,6 +1,6 @@
 package src.Utils
 
-class CategoryValidatorName : CategoryValidatorInterface {
+class CategoryValidator : CategoryValidatorInterface {
 
     override fun isValidCategoryName(categoryName: String): Boolean {
         return categoryName.isNotEmpty()

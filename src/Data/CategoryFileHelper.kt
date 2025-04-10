@@ -17,9 +17,9 @@ object CategoryFileHelper {
         }
     }
 
-    fun writeCategories(file: File, category: MutableList<Category>) {
+    fun writeCategories(file: File, categories: MutableList<Category>) {
         ObjectOutputStream(file.outputStream()).use {
-            it.writeObject(category)
+            it.writeObject(categories)
         }
     }
 }

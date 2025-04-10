@@ -7,15 +7,19 @@ class InFileCategory(private val categoryFile: File) : CategoryInterface {
 
     override fun add(category: Category): Boolean {
         val categories = CategoryFileHelper.readCategories(categoryFile)
-        categories.add(category)
-        CategoryFileHelper.writeCategories(categoryFile, categories)
-        return true
+        val isCategoryAdded= categories.add(category)
+        if (isCategoryAdded){
+            CategoryFileHelper.writeCategories(categoryFile, categories)
+        }
+        return isCategoryAdded
     }
 
     override fun delete(category: Category): Boolean {
         val categories = CategoryFileHelper.readCategories(categoryFile)
         val isRemoved = categories.removeIf { it.name == category.name }
-        CategoryFileHelper.writeCategories(categoryFile, categories)
+        if (isRemoved) {
+            CategoryFileHelper.writeCategories(categoryFile, categories)
+        }
         return isRemoved
     }
 

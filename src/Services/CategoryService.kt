@@ -4,28 +4,32 @@ import Models.Category
 import src.Data.CategoryInterface
 import src.Utils.CategoryValidatorInterface
 
-class CategoryService(private val categoryInterface: CategoryInterface, private val categoryValidatorInterface: CategoryValidatorInterface) {
+class CategoryService(
+    private val categoryImp: CategoryInterface,
+    private val categoryValidatorInterface: CategoryValidatorInterface
+) {
 
     fun addCategory(category: Category): Boolean {
-        val isValidCategory= categoryValidatorInterface.isValidCategoryName(category.name)
+        val isValidCategory = categoryValidatorInterface.isValidCategoryName(category.name)
         if (!isValidCategory) return false
         if (isCategoryExist(category)) return false
-        return categoryInterface.add(category)
+        return categoryImp.add(category)
     }
 
     fun deleteCategory(category: Category): Boolean {
-        if (category.name.isEmpty()) return false
+        val isValidCategory = categoryValidatorInterface.isValidCategoryName(category.name)
+        if (!isValidCategory) return false
         if (!isCategoryExist(category)) return false
-        return categoryInterface.delete(category)
+        return categoryImp.delete(category)
     }
 
     fun getAllCategories(): List<Category> {
-        return categoryInterface.getAll()
+        return categoryImp.getAll()
     }
 
     private fun isCategoryExist(category: Category): Boolean {
-        val filteredCategories = categoryInterface.getAll().filter {
-            it.name.trim().equals(category.name.trim(), true) }
-        return filteredCategories.isNotEmpty()
+        return categoryImp.getAll().any {
+            it.name.trim().equals(category.name.trim(), true)
+        }
     }
 }

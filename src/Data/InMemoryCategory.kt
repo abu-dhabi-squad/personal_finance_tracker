@@ -8,9 +8,9 @@ class InMemoryCategory : CategoryInterface {
     override fun add(category: Category): Boolean {
         return categories.add(category)
     }
+
     override fun delete(category: Category): Boolean {
         return categories.removeIf { it.name == category.name }
-
     }
 
     override fun getAll(): List<Category> {
