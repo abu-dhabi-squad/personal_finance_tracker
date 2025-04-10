@@ -1,7 +1,8 @@
 package Test
 
 fun main() {
-    ReportTests().runAllTestCases()
+    TransactionTests().runAllTests()
+    TransactionValidatorTest().runAllTests()
 }
 
 fun test(name: String, actualResult: Any, expectedResult: Any) {
