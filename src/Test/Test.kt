@@ -1,7 +1,7 @@
 package Test
 
 fun main() {
-    reportTestCases()
+    ReportTests().runAllTestCases()
 }
 
 fun test(name: String, actualResult: Any, expectedResult: Any) {
