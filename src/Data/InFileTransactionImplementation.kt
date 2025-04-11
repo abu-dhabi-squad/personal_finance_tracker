@@ -55,7 +55,7 @@ class InFileTransactionImplementation(private val transactionsFile: File) : Tran
     }
 
     override fun getAll(): List<Transaction> {
-        return TransactionFileHelper.readTransactions(transactionsFile)
+        return FileHelper.readList(transactionsFile)
     }
 
     override fun getByMonth(month: Int, year: Int): List<Transaction> {

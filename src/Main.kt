@@ -1,5 +1,4 @@
 import Data.InFileTransactionImplementation
-import Data.InMemoryTransactionImplementation
 import Models.Category
 import Models.TransactionType
 import Models.UITransaction
@@ -7,7 +6,6 @@ import Services.*
 import Utils.DateParserImplementation
 import Utils.DateParserInterface
 import src.Data.InFileCategory
-import src.Data.InMemoryCategory
 import src.Utils.CategoryValidator
 import java.io.File
 
