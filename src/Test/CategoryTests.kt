@@ -57,7 +57,8 @@ class CategoryTests {
     }
 
     fun testAddCategoryInFile() {
-        val categoryService = CategoryService(InFileCategory(File("out/category file")), CategoryValidator())
+        File("out/category_file").delete()
+        val categoryService = CategoryService(InFileCategory(File("out/category_file")), CategoryValidator())
         test(
             "check add new category in file", true,
             categoryService.addCategory(Category("Shopping"))

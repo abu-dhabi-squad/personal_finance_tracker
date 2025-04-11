@@ -61,7 +61,7 @@ class ReportTests{
         memory.add(Transaction(200.0, Category("medical"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
         reportService = ReportService(memory,reportValidatorImplementation)
         test(
-            "dont have the month in the list",
+            "don't have the month in the list",
             reportService.getSummaryByMonth(1, 2025),
             MonthTransactions(1, 2025, 0.0, 0.0, listOf())
         )
@@ -71,8 +71,15 @@ class ReportTests{
         memory.add(Transaction(10.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
         memory.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
         reportService = ReportService(memory,reportValidatorImplementation)
+        val caseResult = reportService.getSummaryByMonth(LocalDate.now().month.value, LocalDate.now().year).transactions.size
         test(
-            "dont have the year in the list",
+            "have 3 transactions in the list",
+            caseResult,
+            3
+        )
+        reportService = ReportService(memory,reportValidatorImplementation)
+        test(
+            "don't have the year in the list",
             reportService.getSummaryByMonth(1, 0),
             MonthTransactions(1, 0, 0.0, 0.0, listOf())
         )
@@ -80,18 +87,20 @@ class ReportTests{
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
         memory = InMemoryTransactionImplementation()
-        memory.add(Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1))
+        val firstCategory = Category("food")
+        val secondCategory = Category("beauty")
+        memory.add(Transaction(100.0, firstCategory, TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1))
         memory.add(Transaction(10.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
         memory.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
-        memory.add(Transaction(10.0, Category("beauty"), TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2))
+        memory.add(Transaction(10.0, secondCategory, TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2))
         reportService = ReportService(memory,reportValidatorImplementation)
         test(
             "have multiple months in list",
             reportService.getSummaryByMonth(1, 2024),
             MonthTransactions(
                 1, 2024, 100.0, 10.0, listOf(
-                    Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1),
-                    Transaction(10.0, Category("beauty"), TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2),
+                    Transaction(100.0,firstCategory, TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1),
+                    Transaction(10.0, secondCategory, TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2),
                 )
             )
         )
@@ -132,6 +141,8 @@ class ReportTests{
         File("out/reportTest.txt").delete()
         val file = InFileTransactionImplementation(File("out/reportTest.txt"))
         var reportService = ReportService(file,reportValidatorImplementation)
+
+
         test("empty list", reportService.getSummaryByMonth(1, 2025), MonthTransactions(1, 2025, 0.0, 0.0, listOf()))
 
 
@@ -140,30 +151,37 @@ class ReportTests{
         file.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
         file.add(Transaction(200.0, Category("medical"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
         reportService = ReportService(file,reportValidatorImplementation)
+        val caseResult = reportService.getSummaryByMonth(LocalDate.now().month.value, LocalDate.now().year).transactions.size
         test(
-            "dont have the month in the list",
+            "have 4 transactions in the list",
+            caseResult,
+            4
+        )
+        test(
+            "don't have the month in the list",
             reportService.getSummaryByMonth(1, 2025),
             MonthTransactions(1, 2025, 0.0, 0.0, listOf())
         )
-
         test(
-            "dont have the year in the list",
+            "don't have the year in the list",
             reportService.getSummaryByMonth(1, 0),
             MonthTransactions(1, 0, 0.0, 0.0, listOf())
         )
 
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
-        file.add(Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1))
-        file.add(Transaction(10.0, Category("beauty"), TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2))
+        val firstCategory = Category("food")
+        val secondCategory = Category("beauty")
+        file.add(Transaction(100.0, firstCategory, TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1))
+        file.add(Transaction(10.0, secondCategory, TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2))
         reportService = ReportService(file,reportValidatorImplementation)
         test(
             "have multiple months in list",
             reportService.getSummaryByMonth(1, 2024),
             MonthTransactions(
                 1, 2024, 100.0, 10.0, listOf(
-                    Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1),
-                    Transaction(10.0, Category("beauty"), TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2),
+                    Transaction(100.0, firstCategory, TransactionType.INCOME, LocalDate.of(2024, 1, 12), id1),
+                    Transaction(10.0, secondCategory, TransactionType.EXPENSES, LocalDate.of(2024, 1, 13), id2),
                 )
             )
         )
