@@ -1,4 +1,4 @@
-package src.test
+package test
 
 import Models.Category
 import src.Services.Category.CategoryService

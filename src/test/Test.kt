@@ -1,7 +1,5 @@
-package src.test
+package test
 
-import test.TransactionTests
-import test.TransactionValidatorTest
 import kotlin.system.exitProcess
 
 fun main() {
