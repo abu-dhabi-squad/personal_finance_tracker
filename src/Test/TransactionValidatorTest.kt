@@ -3,7 +3,7 @@ package Test
 import Models.Category
 import Models.TransactionType
 import Models.UITransaction
-import Services.TransactionValidatorImplementation
+import src.Services.Transaction.TransactionValidatorImplementation
 import Utils.DateParserImplementation
 
 class TransactionValidatorTest {
