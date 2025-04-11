@@ -12,18 +12,15 @@ class ReportService(private val transactionInterface: TransactionInterface, priv
     }
 
     fun getSummaryByMonth(month: Int, year: Int): MonthTransactions {
-        if (reportValidatorInterface.isValidMonth(month) && reportValidatorInterface.isValidYear(year)) {
-            val transactions = transactionInterface.getByMonth(month, year)
-            var totalIncome = 0.0
-            var totalExpenses = 0.0
-            transactions.forEach { transaction ->
-                if (transaction.transactionType == TransactionType.INCOME)
-                    totalIncome += transaction.amount
-                else totalExpenses += transaction.amount
-            }
-            return MonthTransactions(month, year, totalIncome, totalExpenses, transactions)
-        }
-        return MonthTransactions(month, year, 0.0, 0.0, listOf())
+        if (!reportValidatorInterface.isValidMonth(month) || !reportValidatorInterface.isValidYear(year))
+            return MonthTransactions(month, year, 0.0, 0.0, emptyList())
+
+        val transactions = transactionInterface.getByMonth(month, year)
+        val totalIncome = calculateTotalByType(transactions, TransactionType.INCOME)
+        val totalExpenses = calculateTotalByType(transactions, TransactionType.EXPENSES)
+
+        return MonthTransactions(month, year, totalIncome, totalExpenses, transactions)
+
     }
 
     private fun calculateBalance(transactions: List<Transaction>): Double {
@@ -34,4 +31,11 @@ class ReportService(private val transactionInterface: TransactionInterface, priv
             }
         }
     }
+
+    private fun calculateTotalByType(transactions: List<Transaction>, type: TransactionType): Double {
+        return transactions
+            .filter { it.transactionType == type }
+            .sumOf { it.amount }
+    }
+
 }
