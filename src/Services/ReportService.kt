@@ -2,20 +2,13 @@ package Services
 
 import Data.TransactionInterface
 import Models.MonthTransactions
+import Models.Transaction
 import Models.TransactionType
 
 class ReportService(private val transactionInterface: TransactionInterface, private val reportValidatorInterface: ReportValidatorInterface) {
 
     fun getBalance(): Double {
-        val transactions = transactionInterface.getAll()
-        var balance = 0.0
-        transactions.forEach { transaction ->
-            when (transaction.transactionType) {
-                TransactionType.INCOME -> balance += transaction.amount
-                TransactionType.EXPENSES -> balance -= transaction.amount
-            }
-        }
-        return balance
+        return calculateBalance(transactionInterface.getAll())
     }
 
     fun getSummaryByMonth(month: Int, year: Int): MonthTransactions {
@@ -31,5 +24,14 @@ class ReportService(private val transactionInterface: TransactionInterface, priv
             return MonthTransactions(month, year, totalIncome, totalExpenses, transactions)
         }
         return MonthTransactions(month, year, 0.0, 0.0, listOf())
+    }
+
+    private fun calculateBalance(transactions: List<Transaction>): Double {
+        return transactions.fold(0.0) { total, transaction ->
+            when (transaction.transactionType) {
+                TransactionType.INCOME -> total + transaction.amount
+                TransactionType.EXPENSES -> total - transaction.amount
+            }
+        }
     }
 }
