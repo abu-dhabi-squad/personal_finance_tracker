@@ -1,6 +1,7 @@
 package Services
 
 import Models.Category
+import Models.TransactionType
 import src.Data.CategoryInterface
 import java.time.LocalDate
 
@@ -16,4 +17,7 @@ class ReportValidatorImplementation(val categoryInterface: CategoryInterface): R
         }
         return isExsit
     }
+
+    override fun isValidTransactionType(transactionType: TransactionType): Boolean =
+        transactionType in TransactionType.entries.toTypedArray()
 }
