@@ -1,4 +1,4 @@
-package Test
+package test
 
 import Data.InFileTransactionImplementation
 import Data.InMemoryTransactionImplementation
@@ -9,6 +9,7 @@ import Models.UITransaction
 import src.Services.Transaction.TransactionService
 import src.Services.Transaction.TransactionValidatorImplementation
 import Utils.DateParserImplementation
+import src.test.test
 import java.io.File
 import java.io.ObjectOutputStream
 import java.util.*

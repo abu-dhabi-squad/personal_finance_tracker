@@ -1,10 +1,11 @@
-package Test
+package test
 
 import Models.Category
 import Models.TransactionType
 import Models.UITransaction
 import src.Services.Transaction.TransactionValidatorImplementation
 import Utils.DateParserImplementation
+import src.test.test
 
 class TransactionValidatorTest {
 

@@ -1,4 +1,4 @@
-package Test
+package src.test
 
 import Data.InFileTransactionImplementation
 import Data.InMemoryTransactionImplementation
