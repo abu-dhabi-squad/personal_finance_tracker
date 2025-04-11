@@ -1,13 +1,14 @@
+package test
+
 import Models.Category
-import Services.CategoryService
-import test.test
+import src.Services.Category.CategoryService
 import src.Data.InFileCategory
 import src.Data.InMemoryCategory
 import src.Utils.CategoryValidator
 import java.io.File
 
 class CategoryTests {
-    fun testAddCategoryInMemory() {
+    private fun testAddCategoryInMemory() {
         val categoryService = CategoryService(InMemoryCategory(), CategoryValidator())
         test(
             "check add new category in memory", true,
@@ -19,7 +20,7 @@ class CategoryTests {
         )
     }
 
-    fun testDeleteCategoryInMemory() {
+    private fun testDeleteCategoryInMemory() {
         var categoryService = CategoryService(InMemoryCategory(), CategoryValidator())
         val category = Category("Shopping")
         categoryService.addCategory(category)
@@ -35,8 +36,8 @@ class CategoryTests {
         )
     }
 
-    fun testGetAllCategoryInMemory() {
-        var categoryService: CategoryService = CategoryService(InMemoryCategory(), CategoryValidator())
+    private fun testGetAllCategoryInMemory() {
+        var categoryService = CategoryService(InMemoryCategory(), CategoryValidator())
         var category = Category("Rent")
         categoryService.addCategory(category)
         var testList = listOf(category)
@@ -56,7 +57,7 @@ class CategoryTests {
         )
     }
 
-    fun testAddCategoryInFile() {
+    private fun testAddCategoryInFile() {
         File("out/category_file").delete()
         val categoryService = CategoryService(InFileCategory(File("out/category_file")), CategoryValidator())
         test(
@@ -69,7 +70,7 @@ class CategoryTests {
         )
     }
 
-    fun testGetAllCategoryInFile() {
+    private fun testGetAllCategoryInFile() {
         val categoryService = CategoryService(InFileCategory(File("out/${System.currentTimeMillis()}")), CategoryValidator())
         var category = Category("Rent")
         categoryService.addCategory(category)
@@ -90,8 +91,8 @@ class CategoryTests {
         )
     }
 
-    fun testDeleteCategoryInFile() {
-        var categoryService: CategoryService =
+    private fun testDeleteCategoryInFile() {
+        var categoryService =
             CategoryService(InFileCategory(File("out/${System.currentTimeMillis()}")), CategoryValidator())
         val category = Category("Shopping")
         categoryService.addCategory(category)
