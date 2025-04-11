@@ -46,4 +46,4 @@ jobs:
       # Test Execution
       - name: Run Kotlin tests
         run: |
-          kotlin -classpath out/compiled.jar TestKt
+          kotlin -classpath out/compiled.jar src/Test/TestKt
