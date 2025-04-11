@@ -44,6 +44,7 @@ fun showMenu() {
         println("║ 6.    Delete Transaction           ║")
         println("║ 7.    List All Transactions        ║")
         println("║ 8.    Show Monthly Report          ║")
+        println("║ 9.    Show Total Balance           ║")
         println("║ 0.    Exit                         ║")
         println("╚════════════════════════════════════╝")
 
@@ -78,6 +79,10 @@ fun showMenu() {
 
             8 -> {
                 getMonthlyReport(reportService)
+            }
+
+            9 -> {
+                getBalance(reportService)
             }
 
             else -> return
@@ -312,4 +317,8 @@ private fun getMonthlySummaryFormat(reportService: ReportService, month: Int, ye
                 String.format("%-18s |", trans.date.toString()) + "\n"
     }
     return result
+}
+
+fun getBalance(reportService: ReportService) {
+    println("the Balance = " + reportService.getBalance())
 }
