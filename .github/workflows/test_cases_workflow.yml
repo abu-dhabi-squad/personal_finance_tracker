@@ -23,12 +23,27 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, The chance!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # Install Kotlin 2.0 via SDKMAN
+      - name: Install Kotlin 2.0
         run: |
-          echo Add other actions to tests,
-          echo test, and deploy your project.
+          # Install SDKMAN
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+                  
+          # Install Kotlin 2.0
+          sdk install kotlin 2.0.0
+                  
+           # Verify installation
+           echo "Kotlin version: $(kotlin -version)"
+           echo "Kotlin compiler version: $(kotlinc -version)"
+
+      # Compile all specified .kt files
+      - name: Compile Kotlin source files
+        run: |
+          mkdir -p out
+          kotlinc src -include-runtime -d out/compiled.jar
+
+      # Test Execution
+      - name: Run Kotlin tests
+        run: |
+          kotlin -classpath out/compiled.jar test.TestKt

@@ -1,4 +1,4 @@
-package Test
+package test
 
 import Models.Category
 import Models.TransactionType
