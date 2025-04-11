@@ -78,7 +78,7 @@ class TransactionValidatorTest {
 
         tr = UITransaction(
             amount = 150.0,
-            date = "29-02-1999",
+            date = "29-02-2024",
             category = Category("Cat 1"),
             transactionType = TransactionType.EXPENSES
         )
