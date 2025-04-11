@@ -6,8 +6,8 @@ import Models.Category
 import Models.MonthTransactions
 import Models.Transaction
 import Models.TransactionType
-import src.Services.Report.ReportService
-import src.Services.Report.ReportValidatorImplementation
+import Services.ReportService
+import Services.ReportValidatorImplementation
 import java.io.File
 import java.time.LocalDate
 import java.util.*

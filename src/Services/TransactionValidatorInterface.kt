@@ -1,4 +1,4 @@
-package src.Services.Transaction
+package Services
 
 interface TransactionValidatorInterface {
     fun isValidAmount(amount: Double): Boolean
