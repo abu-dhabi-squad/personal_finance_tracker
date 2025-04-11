@@ -2,6 +2,7 @@ package Data
 
 import Models.Transaction
 import Models.TransactionType
+import Utils.FileHelper
 import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -55,7 +56,7 @@ class InFileTransactionImplementation(private val transactionsFile: File) : Tran
     }
 
     override fun getAll(): List<Transaction> {
-        return TransactionFileHelper.readTransactions(transactionsFile)
+        return FileHelper.readList(transactionsFile)
     }
 
     override fun getByMonth(month: Int, year: Int): List<Transaction> {
