@@ -1,13 +1,13 @@
 package test
 
-import Data.InFileTransactionImplementation
-import Data.InMemoryTransactionImplementation
+import src.Data.Transaction.InFileTransactionImplementation
+import src.Data.Transaction.InMemoryTransactionImplementation
 import Models.Category
 import Models.Transaction
 import Models.TransactionType
 import Models.UITransaction
-import Services.TransactionService
-import Services.TransactionValidatorImplementation
+import src.Services.Transaction.TransactionService
+import src.Services.Transaction.TransactionValidatorImplementation
 import Utils.DateParserImplementation
 import java.io.File
 import java.io.ObjectOutputStream

@@ -1,6 +1,6 @@
-package Services
+package src.Services.Transaction
 
-import Data.TransactionInterface
+import src.Data.Transaction.TransactionInterface
 import Models.Transaction
 import Models.UITransaction
 import Utils.DateParserInterface

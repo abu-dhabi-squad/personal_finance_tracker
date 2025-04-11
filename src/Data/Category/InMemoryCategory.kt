@@ -1,4 +1,4 @@
-package src.Data
+package src.Data.Category
 
 import Models.Category
 
@@ -10,7 +10,7 @@ class InMemoryCategory : CategoryInterface {
     }
 
     override fun delete(category: Category): Boolean {
-        return categories.removeIf { it.name == category.name }
+        return categories.removeIf{it.name==category.name}
     }
 
     override fun getAll(): List<Category> {
