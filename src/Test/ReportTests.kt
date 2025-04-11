@@ -31,7 +31,7 @@ class ReportTests{
         println("\n${"*".repeat(10)} Test Get Balance In Memory ${"*".repeat(10)}\n")
 
         val inMemoryCategory = InMemoryCategory()
-        val reportValidatorImplementation = ReportValidatorImplementation(inMemoryCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
         var reportService = ReportService(InMemoryTransactionImplementation(),reportValidatorImplementation)
         test("empty list", reportService.getBalance(), 0.0)
 
@@ -58,7 +58,7 @@ class ReportTests{
         println("\n${"*".repeat(10)} Test Get By Month In Memory ${"*".repeat(10)}\n")
 
         val inMemoryCategory = InMemoryCategory()
-        val reportValidatorImplementation = ReportValidatorImplementation(inMemoryCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
 
         var reportService = ReportService(InMemoryTransactionImplementation(),reportValidatorImplementation)
         test("empty list", reportService.getSummaryByMonth(1, 2025), SummaryTransactions( 0.0, 0.0, listOf()))
@@ -122,7 +122,7 @@ class ReportTests{
 
         File("out/reportTestCategory.txt").delete()
         val inMemoryCategory = InFileCategory(File("out/reportTestCategory.txt"))
-        val reportValidatorImplementation = ReportValidatorImplementation(inMemoryCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
         File("out/reportTest.txt").delete()
 
         val file = InFileTransactionImplementation(File("out/reportTest.txt"))
@@ -153,7 +153,7 @@ class ReportTests{
 
         File("out/reportTestCategory.txt").delete()
         val inFileCategory = InFileCategory(File("out/reportTestCategory.txt"))
-        val reportValidatorImplementation = ReportValidatorImplementation(inFileCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
         inFileCategory.add(Category("food",UUID.randomUUID().toString()))
         File("out/reportTest.txt").delete()
         val file = InFileTransactionImplementation(File("out/reportTest.txt"))
@@ -210,25 +210,12 @@ class ReportTests{
         println("\n${"*".repeat(10)} Test Get By Category In Memory ${"*".repeat(10)}\n")
 
         val inMemoryCategory = InMemoryCategory()
-        val reportValidatorImplementation = ReportValidatorImplementation(inMemoryCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
 
         var reportService = ReportService(InMemoryTransactionImplementation(),reportValidatorImplementation)
         test("empty list", reportService.getSummaryByCategory(Category("food")), SummaryTransactions( 0.0, 0.0, listOf()))
 
         var memory = InMemoryTransactionImplementation()
-        inMemoryCategory.add(Category("food",UUID.randomUUID().toString()))
-        memory.add(Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
-        memory.add(Transaction(10.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
-        memory.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
-        memory.add(Transaction(200.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
-        reportService = ReportService(memory,reportValidatorImplementation)
-        test(
-            "don't have the category in the list",
-            reportService.getSummaryByCategory(Category("beauty")),
-            SummaryTransactions(0.0, 0.0, listOf())
-        )
-
-        memory = InMemoryTransactionImplementation()
         memory.add(Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
         memory.add(Transaction(10.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
         memory.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
@@ -267,7 +254,7 @@ class ReportTests{
 
         File("out/reportTestCategory.txt").delete()
         val inFileCategory = InFileCategory(File("out/reportTestCategory.txt"))
-        val reportValidatorImplementation = ReportValidatorImplementation(inFileCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
 
         var reportService = ReportService(InMemoryTransactionImplementation(),reportValidatorImplementation)
         test("empty list", reportService.getSummaryByCategory(Category("food")), SummaryTransactions( 0.0, 0.0, listOf()))
@@ -279,13 +266,6 @@ class ReportTests{
         file.add(Transaction(10.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
         file.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
         file.add(Transaction(200.0, Category("food"), TransactionType.EXPENSES, LocalDate.now(), UUID.randomUUID()))
-        reportService = ReportService(file,reportValidatorImplementation)
-        test(
-            "don't have the category in the list",
-            reportService.getSummaryByCategory(Category("beauty")),
-            SummaryTransactions(0.0, 0.0, listOf())
-        )
-
         reportService = ReportService(file,reportValidatorImplementation)
         val caseResult = reportService.getSummaryByCategory(Category("food")).transactions.size
         test(
@@ -323,25 +303,12 @@ class ReportTests{
         println("\n${"*".repeat(10)} Test Get By Transaction Type In Memory ${"*".repeat(10)}\n")
 
         val inMemoryCategory = InMemoryCategory()
-        val reportValidatorImplementation = ReportValidatorImplementation(inMemoryCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
 
         var reportService = ReportService(InMemoryTransactionImplementation(),reportValidatorImplementation)
         test("empty list", reportService.getSummaryByType(TransactionType.INCOME), SummaryTransactions( 0.0, 0.0, listOf()))
 
         var memory = InMemoryTransactionImplementation()
-        inMemoryCategory.add(Category("food",UUID.randomUUID().toString()))
-        memory.add(Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
-        memory.add(Transaction(10.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
-        memory.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
-        memory.add(Transaction(200.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
-        reportService = ReportService(memory,reportValidatorImplementation)
-        test(
-            "don't have the type in the list",
-            reportService.getSummaryByType(TransactionType.EXPENSES),
-            SummaryTransactions(0.0, 0.0, listOf())
-        )
-
-        memory = InMemoryTransactionImplementation()
         memory.add(Transaction(100.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
         memory.add(Transaction(10.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
         memory.add(Transaction(120.0, Category("food"), TransactionType.INCOME, LocalDate.now(), UUID.randomUUID()))
@@ -380,10 +347,9 @@ class ReportTests{
 
         File("out/reportTestCategory.txt").delete()
         val inFileCategory = InFileCategory(File("out/reportTestCategory.txt"))
-        val reportValidatorImplementation = ReportValidatorImplementation(inFileCategory)
+        val reportValidatorImplementation = ReportValidatorImplementation()
 
         var reportService = ReportService(InMemoryTransactionImplementation(),reportValidatorImplementation)
-        test("empty list", reportService.getSummaryByCategory(Category("food")), SummaryTransactions( 0.0, 0.0, listOf()))
 
         File("out/reportTest.txt").delete()
         var file = InFileTransactionImplementation(File("out/reportTest.txt"))

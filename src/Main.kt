@@ -28,7 +28,7 @@ fun showMenu() {
         validator = TransactionValidatorImplementation(dateParser),
     )
     val reportService = ReportService(
-        reportValidatorInterface = ReportValidatorImplementation(categoryImp),
+        reportValidatorInterface = ReportValidatorImplementation(),
         transactionInterface = transactionImp
     )
     do {
