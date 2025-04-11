@@ -41,7 +41,7 @@ jobs:
       - name: Compile Kotlin source files
         run: |
           mkdir -p out
-          kotlinc src/*.kt src/Data/*.kt src/Models/*.kt src/Services/*.kt src/Test/*.kt src/Utils/*.kt -include-runtime -d out/compiled.jar
+          kotlinc src/*.kt src/Data/*.kt src/Models/*.kt src/Services/*.kt src/test/*.kt src/Utils/*.kt -include-runtime -d out/compiled.jar
 
       # Test Execution
       - name: Run Kotlin tests
