@@ -1,5 +1,6 @@
 import Data.InFileTransactionImplementation
 import Models.Category
+import Models.SummaryTransactions
 import Models.TransactionType
 import Models.UITransaction
 import Services.*
@@ -31,20 +32,22 @@ fun showMenu() {
         transactionInterface = transactionImp
     )
     do {
-        println("╔════════════════════════════════════╗")
-        println("║          Personal Finance          ║")
-        println("╠════════════════════════════════════╣")
-        println("║ 1.    Add Category                 ║")
-        println("║ 2.    Delete Category              ║")
-        println("║ 3.    List All Categories          ║")
-        println("║ 4.    Add Transaction              ║")
-        println("║ 5.    Edit Transaction             ║")
-        println("║ 6.    Delete Transaction           ║")
-        println("║ 7.    List All Transactions        ║")
-        println("║ 8.    Show Monthly Report          ║")
-        println("║ 9.    Show Total Balance           ║")
-        println("║ 0.    Exit                         ║")
-        println("╚════════════════════════════════════╝")
+        println("╔═══════════════════════════════════════╗")
+        println("║          Personal Finance             ║")
+        println("╠═══════════════════════════════════════╣")
+        println("║ 1.    Add Category                    ║")
+        println("║ 2.    Delete Category                 ║")
+        println("║ 3.    List All Categories             ║")
+        println("║ 4.    Add Transaction                 ║")
+        println("║ 5.    Edit Transaction                ║")
+        println("║ 6.    Delete Transaction              ║")
+        println("║ 7.    List All Transactions           ║")
+        println("║ 8.    Show Monthly Report             ║")
+        println("║ 9.    Show Category Report            ║")
+        println("║ 10.   Show Income/Expenses Report     ║")
+        println("║ 11.   Show Total Balance              ║")
+        println("║ 0.    Exit                            ║")
+        println("╚═══════════════════════════════════════╝")
 
         when (getUserInput()) {
             1 -> {
@@ -80,6 +83,12 @@ fun showMenu() {
             }
 
             9 -> {
+                getCategoryReport(reportService,categoryService)
+            }
+            10 -> {
+                getByTransactionTypeReport(reportService)
+            }
+            11 -> {
                 getBalance(reportService)
             }
 
@@ -295,20 +304,72 @@ fun getMonthlyReport(reportService: ReportService) {
         return
     }
 
-    println(getMonthlySummaryFormat(reportService, month, year))
+    val result = "\nmonth = " + month + "\nyear = " + year + "\n"
+    val summaryTransactions = reportService.getSummaryByMonth(month, year)
+    println(result + getSummaryFormat(summaryTransactions))
 }
 
-private fun getMonthlySummaryFormat(reportService: ReportService, month: Int, year: Int): String {
-    val monthTransactions = reportService.getSummaryByMonth(month, year)
-    if (monthTransactions.transactions.isEmpty()) {
+fun getCategoryReport(reportService: ReportService, categoryService: CategoryService) {
+    listAllCategories(categoryService)
+    val categories = categoryService.getAllCategories()
+    print("\nChoose category: ")
+    val catOption = readln().toIntOrNull()
+    if (catOption == null || catOption !in 1..categories.size) {
+        println("\nInvalid input ...")
+        return
+    }
+    val category = categories[catOption - 1]
+
+    val summaryTransactions = reportService.getSummaryByCategory(category)
+    if (summaryTransactions.transactions.isEmpty())
+    {
+        println("no transactions in this category")
+        return
+    }
+    val result = "\nCategory = " + category +"\n"
+    println(result + getSummaryFormat(summaryTransactions))
+}
+
+fun getByTransactionTypeReport(reportService: ReportService) {
+    println("Transaction Types:")
+    println("1) Income")
+    println("2) Expenses")
+    print("\nEnter Your Choose (1,2): ")
+    val res = readln().toIntOrNull()
+    when(res){
+        1 -> {
+            val summaryTransactions = reportService.getSummaryByType(TransactionType.INCOME)
+            if (summaryTransactions.transactions.isEmpty())
+            {
+                println("no transactions")
+                return
+            }
+            println(getSummaryFormat(summaryTransactions))
+        }
+
+        2 -> {
+            val summaryTransactions = reportService.getSummaryByType(TransactionType.EXPENSES)
+            if (summaryTransactions.transactions.isEmpty())
+            {
+                println("no transactions")
+                return
+            }
+            println(getSummaryFormat(summaryTransactions))
+        }
+    }
+
+}
+
+private fun getSummaryFormat(summaryTransactions: SummaryTransactions): String {
+
+    if (summaryTransactions.transactions.isEmpty()) {
         return "\nNo transaction in this date"
     }
-    var result = "\nmonth = " + monthTransactions.month + "\nyear = " + monthTransactions.year + "\n"
-    result += "total transaction in month = " + monthTransactions.transactions.size + "\n"
-    result += "total income in month = " + monthTransactions.totalIncome + "\n"
-    result += "total expenses in month = " + monthTransactions.totalExpenses + "\n\n"
+    var result = "total transaction = " + summaryTransactions.transactions.size + "\n"
+    result += "total income = " + summaryTransactions.totalIncome + "\n"
+    result += "total expenses = " + summaryTransactions.totalExpenses + "\n\n"
     result += String.format("%-18s | %-18s  | %-18s  | %-18s  |\n", "amount", "category", "transaction Type", "date")
-    monthTransactions.transactions.forEach { trans ->
+    summaryTransactions.transactions.forEach { trans ->
         result += String.format("%-18s |", trans.amount.toString()) + "  " +
                 String.format("%-18s |", trans.category.name) + "  " +
                 String.format("%-18s |", trans.transactionType.name) + "  " +
