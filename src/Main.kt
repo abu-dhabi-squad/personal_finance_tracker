@@ -29,7 +29,7 @@ fun showMenu() {
         validator = TransactionValidatorImplementation(dateParser),
     )
     val reportService = ReportService(
-        reportValidatorInterface = ReportValidatorImplementation(),
+        reportValidatorInterface = ReportValidatorImplementation(categoryImp),
         transactionInterface = transactionImp
     )
     do {
@@ -305,7 +305,7 @@ private fun getMonthlySummaryFormat(reportService: ReportService, month: Int, ye
     if (monthTransactions.transactions.isEmpty()) {
         return "\nNo transaction in this date"
     }
-    var result = "\nmonth = " + monthTransactions.month + "\nyear = " + monthTransactions.year + "\n"
+    var result = "\nmonth = " + month + "\nyear = " + year + "\n"
     result += "total transaction in month = " + monthTransactions.transactions.size + "\n"
     result += "total income in month = " + monthTransactions.totalIncome + "\n"
     result += "total expenses in month = " + monthTransactions.totalExpenses + "\n\n"

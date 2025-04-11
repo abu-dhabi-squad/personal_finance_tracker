@@ -1,7 +1,8 @@
 package Services
 
 import Data.TransactionInterface
-import Models.MonthTransactions
+import Models.Category
+import Models.SummaryTransactions
 import Models.TransactionType
 
 class ReportService(private val transactionInterface: TransactionInterface, private val reportValidatorInterface: ReportValidatorInterface) {
@@ -18,7 +19,7 @@ class ReportService(private val transactionInterface: TransactionInterface, priv
         return balance
     }
 
-    fun getSummaryByMonth(month: Int, year: Int): MonthTransactions {
+    fun getSummaryByMonth(month: Int, year: Int): SummaryTransactions {
         if (reportValidatorInterface.isValidMonth(month) && reportValidatorInterface.isValidYear(year)) {
             val transactions = transactionInterface.getByMonth(month, year)
             var totalIncome = 0.0
@@ -28,8 +29,15 @@ class ReportService(private val transactionInterface: TransactionInterface, priv
                     totalIncome += transaction.amount
                 else totalExpenses += transaction.amount
             }
-            return MonthTransactions(month, year, totalIncome, totalExpenses, transactions)
+            return SummaryTransactions(totalIncome, totalExpenses, transactions)
         }
-        return MonthTransactions(month, year, 0.0, 0.0, listOf())
+        return SummaryTransactions(0.0, 0.0, listOf())
     }
+
+    fun getSummaryByCategory(category: Category): SummaryTransactions {
+
+        return SummaryTransactions(0.0, 0.0, listOf())
+    }
+
+
 }
