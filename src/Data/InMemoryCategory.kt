@@ -10,7 +10,7 @@ class InMemoryCategory : CategoryInterface {
     }
 
     override fun delete(category: Category): Boolean {
-        return categories.removeIf { it.name == category.name }
+        return categories.remove(category)
     }
 
     override fun getAll(): List<Category> {

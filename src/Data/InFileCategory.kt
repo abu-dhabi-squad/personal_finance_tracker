@@ -16,7 +16,7 @@ class InFileCategory(private val categoryFile: File) : CategoryInterface {
 
     override fun delete(category: Category): Boolean {
         val categories = CategoryFileHelper.readCategories(categoryFile)
-        val isRemoved = categories.removeIf { it.name == category.name }
+        val isRemoved = categories.remove(category)
         if (isRemoved) {
             CategoryFileHelper.writeCategories(categoryFile, categories)
         }
