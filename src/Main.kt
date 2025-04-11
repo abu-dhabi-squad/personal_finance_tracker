@@ -1,6 +1,6 @@
-import Data.InFileTransactionImplementation
+import src.Data.Transaction.InFileTransactionImplementation
 import Utils.DateParserImplementation
-import src.Data.InFileCategory
+import src.Data.Category.InFileCategory
 import src.Services.Category.CategoryService
 import src.Services.Category.addCategory
 import src.Services.Category.deleteCategory
@@ -10,7 +10,7 @@ import src.Services.Report.ReportValidatorImplementation
 import src.Services.Report.getBalance
 import src.Services.Report.getMonthlyReport
 import src.Services.Transaction.*
-import src.Utils.CategoryValidator
+import src.Services.Category.CategoryValidator
 import java.io.File
 
 fun main() {

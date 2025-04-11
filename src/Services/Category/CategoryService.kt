@@ -1,8 +1,7 @@
 package src.Services.Category
 
 import Models.Category
-import src.Data.CategoryInterface
-import src.Utils.CategoryValidatorInterface
+import src.Data.Category.CategoryInterface
 
 class CategoryService(
     private val categoryImp: CategoryInterface,

@@ -1,7 +1,7 @@
 package test
 
-import Data.InFileTransactionImplementation
-import Data.InMemoryTransactionImplementation
+import src.Data.Transaction.InFileTransactionImplementation
+import src.Data.Transaction.InMemoryTransactionImplementation
 import Models.Category
 import Models.Transaction
 import Models.TransactionType

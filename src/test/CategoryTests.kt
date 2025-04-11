@@ -1,9 +1,9 @@
 import Models.Category
 import src.Services.Category.CategoryService
 import test.test
-import src.Data.InFileCategory
-import src.Data.InMemoryCategory
-import src.Utils.CategoryValidator
+import src.Data.Category.InFileCategory
+import src.Data.Category.InMemoryCategory
+import src.Services.Category.CategoryValidator
 import java.io.File
 
 class CategoryTests {

@@ -1,4 +1,4 @@
-package src.Data
+package src.Data.Category
 
 import Models.Category
 

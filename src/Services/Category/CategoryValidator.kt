@@ -1,4 +1,4 @@
-package src.Utils
+package src.Services.Category
 
 class CategoryValidator : CategoryValidatorInterface {
 
