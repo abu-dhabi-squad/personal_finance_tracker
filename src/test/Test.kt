@@ -1,5 +1,6 @@
 package test
 
+import CategoryTests
 import kotlin.system.exitProcess
 
 fun main() {

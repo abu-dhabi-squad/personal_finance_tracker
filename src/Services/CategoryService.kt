@@ -1,4 +1,4 @@
-package src.Services.Category
+package Services
 
 import Models.Category
 import src.Data.CategoryInterface

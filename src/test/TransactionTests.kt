@@ -6,8 +6,8 @@ import Models.Category
 import Models.Transaction
 import Models.TransactionType
 import Models.UITransaction
-import src.Services.Transaction.TransactionService
-import src.Services.Transaction.TransactionValidatorImplementation
+import Services.TransactionService
+import Services.TransactionValidatorImplementation
 import Utils.DateParserImplementation
 import java.io.File
 import java.io.ObjectOutputStream
